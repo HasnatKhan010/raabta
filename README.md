@@ -46,43 +46,43 @@ The system preserves the original query, generates normalized, Urdu-script, and 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        Roman-Urdu Query                         │
-└──────────────────────────────┬──────────────────────────────────┘
-                               ▼
-                    ┌─────────────────────┐
-                    │    QueryBridge       │
-                    │  ┌───────────────┐  │
-                    │  │ Original      │  │
-                    │  │ Normalized    │  │  Semantic drift
-                    │  │ Urdu-script   │──│──threshold (0.55)
-                    │  │ Retrieval     │  │
-                    │  └───────────────┘  │
-                    └─────────┬───────────┘
-                     Accepted │ variants
-              ┌───────────────┴───────────────┐
-              ▼                               ▼
-    ┌──────────────────┐           ┌──────────────────┐
-    │  BM25 Retriever  │           │  Dense Retriever  │
-    │  (per variant)   │           │ (multilingual-e5) │
-    └────────┬─────────┘           └────────┬─────────┘
-             └───────────┬──────────────────┘
-                         ▼
-              ┌─────────────────────┐
-              │ Reciprocal Rank     │
-              │ Fusion (RRF)        │
-              └──────────┬──────────┘
-                         ▼
-              ┌─────────────────────┐
-              │ Multilingual        │
-              │ Reranker (optional) │
-              │ (gte-reranker-base) │
-              └──────────┬──────────┘
-                         ▼
-              ┌─────────────────────┐
-              │ Extractive QA       │
-              │ Evidence / Abstain  │
-              └─────────────────────┘
+                      ┌─────────────────────────────────────────────────────────────────┐
+                      │                        Roman-Urdu Query                         │
+                      └──────────────────────────────┬──────────────────────────────────┘
+                                                     ▼
+                                          ┌─────────────────────┐
+                                          │    QueryBridge      │
+                                          │  ┌───────────────┐  │
+                                          │  │ Original      │  │
+                                          │  │ Normalized    │  │  Semantic drift
+                                          │  │ Urdu-script   │──│──threshold (0.55)
+                                          │  │ Retrieval     │  │
+                                          │  └───────────────┘  │
+                                          └─────────┬───────────┘
+                                           Accepted │ variants
+                                    ┌───────────────┴───────────────┐
+                                    ▼                               ▼
+                          ┌──────────────────┐           ┌──────────────────┐
+                          │  BM25 Retriever  │           │  Dense Retriever │
+                          │  (per variant)   │           │ (multilingual-e5)│
+                          └────────┬─────────┘           └────────┬─────────┘
+                                   └───────────┬──────────────────┘
+                                               ▼
+                                    ┌─────────────────────┐
+                                    │ Reciprocal Rank     │
+                                    │ Fusion (RRF)        │
+                                    └──────────┬──────────┘
+                                               ▼
+                                    ┌─────────────────────┐
+                                    │ Multilingual        │
+                                    │ Reranker (optional) │
+                                    │ (gte-reranker-base) │
+                                    └──────────┬──────────┘
+                                               ▼
+                                    ┌─────────────────────┐
+                                    │ Extractive QA       │
+                                    │ Evidence / Abstain  │
+                                    └─────────────────────┘
 ```
 
 ---
@@ -254,7 +254,7 @@ pytest
 | [Grounded QA](docs/phase7_grounded_qa.md) | Extractive answering design |
 | [Frontend validation](docs/phase9_frontend.md) | UI implementation and testing |
 | [Portability validation](docs/phase10_validation.md) | Clean-room reproducibility checks |
-| [Viva preparation](docs/viva_preparation.md) | Presentation notes and talking points |
+
 
 ---
 
