@@ -109,12 +109,14 @@ class RaabtaEngine:
             }
 
         retrieval = self.multiquery.search(query, route_top_k=20, final_top_k=10)
-        reranked_results = self.reranker.rerank(
-            query, list(retrieval.results), self.passages_by_id
-        )
+        reranked_results = self.reranker.rerank(query, list(retrieval.results), self.passages_by_id)
         retrieval_ms = (time.perf_counter() - started) * 1000
         started = time.perf_counter()
-        urdu_variants = [item.query_text for item in retrieval.variants if item.accepted and item.variant_type in ("urdu_script", "retrieval_oriented")]
+        urdu_variants = [
+            item.query_text
+            for item in retrieval.variants
+            if item.accepted and item.variant_type in ("urdu_script", "retrieval_oriented")
+        ]
         answer = self.answerer.answer(
             query,
             reranked_results,
