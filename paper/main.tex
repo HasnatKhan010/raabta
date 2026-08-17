@@ -1,0 +1,24 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{booktabs,graphicx,hyperref,xcolor}
+\title{Raabta: Script-Aware Multi-Query Reformulation and Evidence Retrieval for Roman-Urdu Questions}
+\author{Hasnat Khan}
+\date{Development study -- 16 August 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Roman Urdu is common in digital communication but lacks standard spelling and often mixes with English, while much authoritative content remains in Urdu script. Raabta studies a CPU-first retrieval pipeline that preserves the original query, applies conservative normalization, generates controlled Roman and Urdu-script variants, retrieves through BM25 and multilingual dense routes, combines rankings using reciprocal rank fusion, and optionally reranks a small candidate set. On 120 automatically curated and programmatically checked development questions, QueryBridge raised Recall@10 from 0.0917 for direct dense retrieval to 0.1667; depth-20 reranking raised MRR@10 from 0.0750 to 0.1444. The 60-question test set remains locked and independent native-speaker review is pending.
+\end{abstract}
+\section{Introduction}
+Raabta asks whether controlled script-aware query representations improve retrieval over a fixed Urdu Wikipedia corpus. The contribution is narrower than prior Roman-Urdu benchmark work: it studies multi-query reformulation, complementary retrieval routes, transparent fusion, lightweight reranking, and evidence-first answering.
+\section{Data and protocol}
+The frozen corpus contains 4,000 Urdu Wikipedia articles and 16,352 overlapping passages of 150 tokens with 30-token overlap. A 180-question diagnostic set covers six domains and eight query types, split into 120 development and 60 locked test questions before tuning.
+\section{Method}
+QueryBridge produces at most four traceable representations: original, normalized Roman Urdu, Urdu-script transliteration, and a retrieval-oriented variant. Variants below a semantic-similarity threshold are rejected. Accepted variants independently traverse BM25 and multilingual E5 retrieval routes and are fused with reciprocal rank fusion. A pinned multilingual cross-encoder reranks the top 20 offline. Answers are exact evidence sentences with a source URL or an explicit abstention.
+\section{Results}
+Development-only measurements show QueryBridge Recall@10 of 0.1667 and MRR@10 of 0.0750. Reranking improves Recall@10 to 0.1833 and MRR@10 to 0.1444, at a mean reranking latency of 16.4 seconds on CPU. Ablations identify transliteration, dense retrieval, and rank fusion as the strongest positive contributors. Controlled expansion is not uniformly helpful.
+\section{Limitations and conclusion}
+The annotations and first-pass failure categories require independent native-speaker review. The diagnostic set uses deterministic title-definition construction and is not globally representative. The test set has not been evaluated. Within those limits, the development evidence supports continuing script-aware multi-query retrieval while redesigning expansion and using a shallower reranker for interactive deployment.
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}

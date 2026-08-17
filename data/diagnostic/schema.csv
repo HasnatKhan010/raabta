@@ -1,0 +1,2 @@
+query_id,canonical_question,roman_urdu_query,urdu_query,query_type,noise_level,gold_article_id,gold_passage_id,gold_evidence_text,answerable,domain,notes,split,annotator,verification_status
+

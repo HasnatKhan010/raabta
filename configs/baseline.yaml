@@ -1,0 +1,9 @@
+extends: default.yaml
+experiment:
+  systems:
+    - direct_dense
+    - single_transliteration_bm25
+    - standard_hybrid
+  tune_on: development
+  evaluate_once_on: test
+

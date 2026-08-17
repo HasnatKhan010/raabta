@@ -1,0 +1,55 @@
+project:
+  name: raabta
+  seed: 20250816
+  device: cpu
+
+datasets:
+  wikipedia:
+    path: wikimedia/wikipedia
+    configuration: 20231101.ur
+    revision: 3e1f92c331f318af862b87e2319ed5dc26d80f5d
+    split: train
+    subset_size: 4000
+    domains: [history, geography, science, culture, pakistan, general]
+  roman_urdu_parallel:
+    path: Mavkif/Roman-Urdu-Parl-split
+    revision: b9ef670661582b5f17eff68b4e65fbe25f3cb0b9
+    development_rows: 30000
+
+preprocessing:
+  unicode_form: NFKC
+  chunk_size: 150
+  chunk_overlap: 30
+  development_chunk_settings:
+    - {chunk_size: 120, chunk_overlap: 24}
+    - {chunk_size: 180, chunk_overlap: 36}
+  minimum_article_tokens: 80
+
+retrieval:
+  top_k: 20
+  fusion_constant: 60
+  reranking_top_k: 20
+  dense_backend: numpy_exact
+
+models:
+  dense:
+    name: intfloat/multilingual-e5-small
+    revision: d1d99a1efae6779390caba937d92c54b5bc70e51
+    embedding_dimension: 384
+    batch_size: 32
+    max_tokens: 512
+  reranker:
+    name: Alibaba-NLP/gte-multilingual-reranker-base
+    revision: a6258e9d2b1a11aa7bccdff9efde562bbca4393d
+    code_revision: 40ced75c3017eb27626c9d4ea981bde21a2662f4
+    enabled: false
+    candidate_limit: 20
+
+paths:
+  raw_data: data/raw
+  processed_data: data/processed
+  diagnostic_data: data/diagnostic
+  embeddings: artifacts/embeddings
+  indexes: artifacts/indexes
+  metadata: artifacts/metadata
+  reports: reports

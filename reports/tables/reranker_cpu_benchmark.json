@@ -1,0 +1,41 @@
+{
+  "batch_size": 4,
+  "depths": {
+    "10": {
+      "maximum_ms": 8526.556,
+      "mean_ms": 8074.98
+    },
+    "20": {
+      "maximum_ms": 16685.882,
+      "mean_ms": 15818.796
+    },
+    "5": {
+      "maximum_ms": 4062.044,
+      "mean_ms": 3372.787
+    }
+  },
+  "examples": [
+    {
+      "gold_after": 2,
+      "gold_before": 10,
+      "query_id": "raabta-001"
+    },
+    {
+      "gold_after": null,
+      "gold_before": null,
+      "query_id": "raabta-002"
+    },
+    {
+      "gold_after": 1,
+      "gold_before": 4,
+      "query_id": "raabta-003"
+    }
+  ],
+  "model": "Alibaba-NLP/gte-multilingual-reranker-base",
+  "model_load_seconds": 105.752,
+  "queries": 3,
+  "resident_memory_mb_after_benchmark": 2550.64,
+  "revision": "a6258e9d2b1a11aa7bccdff9efde562bbca4393d",
+  "status": "development_cpu_feasibility_benchmark",
+  "test_queries_used": 0
+}

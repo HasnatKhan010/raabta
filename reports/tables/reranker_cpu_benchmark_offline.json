@@ -1,0 +1,24 @@
+{
+  "batch_size": 4,
+  "code_revision": "40ced75c3017eb27626c9d4ea981bde21a2662f4",
+  "depths": {
+    "5": {
+      "maximum_ms": 2642.14,
+      "mean_ms": 2642.14
+    }
+  },
+  "examples": [
+    {
+      "gold_after": 2,
+      "gold_before": 3,
+      "query_id": "raabta-001"
+    }
+  ],
+  "model": "Alibaba-NLP/gte-multilingual-reranker-base",
+  "model_load_seconds": 1.656,
+  "queries": 1,
+  "resident_memory_mb_after_benchmark": 2527.38,
+  "revision": "a6258e9d2b1a11aa7bccdff9efde562bbca4393d",
+  "status": "development_cpu_feasibility_benchmark",
+  "test_queries_used": 0
+}

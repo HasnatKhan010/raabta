@@ -1,0 +1,73 @@
+{
+  "configurations": {
+    "full_no_reranker": {
+      "mean_latency_ms": 425.241,
+      "mrr_at_10": 0.074987,
+      "ndcg_at_10": 0.095905,
+      "p95_latency_ms": 638.872,
+      "recall_at_1": 0.05,
+      "recall_at_10": 0.166667,
+      "recall_at_5": 0.1
+    },
+    "no_bm25": {
+      "mean_latency_ms": 271.08,
+      "mrr_at_10": 0.05295,
+      "ndcg_at_10": 0.073045,
+      "p95_latency_ms": 333.431,
+      "recall_at_1": 0.033333,
+      "recall_at_10": 0.141667,
+      "recall_at_5": 0.083333
+    },
+    "no_dense": {
+      "mean_latency_ms": 254.754,
+      "mrr_at_10": 0.04876,
+      "ndcg_at_10": 0.057011,
+      "p95_latency_ms": 420.771,
+      "recall_at_1": 0.033333,
+      "recall_at_10": 0.083333,
+      "recall_at_5": 0.066667
+    },
+    "no_expansion": {
+      "mean_latency_ms": 354.424,
+      "mrr_at_10": 0.084339,
+      "ndcg_at_10": 0.101106,
+      "p95_latency_ms": 518.778,
+      "recall_at_1": 0.066667,
+      "recall_at_10": 0.158333,
+      "recall_at_5": 0.108333
+    },
+    "no_fusion": {
+      "mean_latency_ms": 489.182,
+      "mrr_at_10": 0.023214,
+      "ndcg_at_10": 0.031582,
+      "p95_latency_ms": 715.192,
+      "recall_at_1": 0.008333,
+      "recall_at_10": 0.058333,
+      "recall_at_5": 0.041667
+    },
+    "no_normalization": {
+      "mean_latency_ms": 402.893,
+      "mrr_at_10": 0.071515,
+      "ndcg_at_10": 0.089347,
+      "p95_latency_ms": 591.384,
+      "recall_at_1": 0.05,
+      "recall_at_10": 0.15,
+      "recall_at_5": 0.091667
+    },
+    "no_transliteration": {
+      "mean_latency_ms": 335.799,
+      "mrr_at_10": 0.025301,
+      "ndcg_at_10": 0.034572,
+      "p95_latency_ms": 499.581,
+      "recall_at_1": 0.016667,
+      "recall_at_10": 0.066667,
+      "recall_at_5": 0.033333
+    }
+  },
+  "limitation": "The six retrieval-component controls isolate retrieval behavior before reranking; the separately measured no-reranking control isolates the reranker. Independent native-speaker review remains pending.",
+  "no_reranking_comparison_source": "reports/tables/provisional_reranker_depth20.json",
+  "protocol": "retrieval-stage leave-one-component-out; reranker held absent",
+  "queries": 120,
+  "status": "provisional_codex_verified_development_only",
+  "test_queries_used": 0
+}

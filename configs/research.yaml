@@ -1,0 +1,15 @@
+extends: default.yaml
+experiment:
+  system: raabta
+  query_variants_maximum: 4
+  equal_route_weights: true
+  semantic_drift_filter: true
+  ablations:
+    - no_normalization
+    - no_transliteration
+    - no_expansion
+    - no_bm25
+    - no_dense
+    - no_fusion
+    - no_reranking
+

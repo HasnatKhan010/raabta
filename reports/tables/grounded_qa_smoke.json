@@ -1,0 +1,188 @@
+{
+  "query": "pakistan ka capital kya hai",
+  "supported": true,
+  "answer": "یہ پاکستان کے قومی اور صوبائی دارالحکومتوں کی ایک فہرست ہے۔ قومی دار الحکومت 1960ء سے پاکستان کا قومی یا وفاقی دار الحکومت اسلام آباد ہے۔",
+  "evidence": [
+    {
+      "passage_id": "58191-p0000-b39fd7c03fbb",
+      "article_id": "58191",
+      "title": "پاکستان کے دارالحکومت",
+      "url": "https://ur.wikipedia.org/wiki/%D9%BE%D8%A7%DA%A9%D8%B3%D8%AA%D8%A7%D9%86%20%DA%A9%DB%92%20%D8%AF%D8%A7%D8%B1%D8%A7%D9%84%D8%AD%DA%A9%D9%88%D9%85%D8%AA",
+      "sentence_index": 0,
+      "text": "یہ پاکستان کے قومی اور صوبائی دارالحکومتوں کی ایک فہرست ہے۔",
+      "similarity": 0.8783,
+      "retrieval_rank": 1
+    },
+    {
+      "passage_id": "58191-p0000-b39fd7c03fbb",
+      "article_id": "58191",
+      "title": "پاکستان کے دارالحکومت",
+      "url": "https://ur.wikipedia.org/wiki/%D9%BE%D8%A7%DA%A9%D8%B3%D8%AA%D8%A7%D9%86%20%DA%A9%DB%92%20%D8%AF%D8%A7%D8%B1%D8%A7%D9%84%D8%AD%DA%A9%D9%88%D9%85%D8%AA",
+      "sentence_index": 1,
+      "text": "قومی دار الحکومت 1960ء سے پاکستان کا قومی یا وفاقی دار الحکومت اسلام آباد ہے۔",
+      "similarity": 0.844936,
+      "retrieval_rank": 1
+    }
+  ],
+  "source_title": "پاکستان کے دارالحکومت",
+  "source_url": "https://ur.wikipedia.org/wiki/%D9%BE%D8%A7%DA%A9%D8%B3%D8%AA%D8%A7%D9%86%20%DA%A9%DB%92%20%D8%AF%D8%A7%D8%B1%D8%A7%D9%84%D8%AD%DA%A9%D9%88%D9%85%D8%AA",
+  "abstention_reason": null,
+  "query_variants": [
+    {
+      "variant_id": "v1",
+      "variant_type": "original",
+      "query_text": "pakistan ka capital kya hai",
+      "generation_method": "identity",
+      "source_query": "pakistan ka capital kya hai",
+      "accepted": true,
+      "semantic_similarity": 1.0,
+      "decision_reason": "accepted_original"
+    },
+    {
+      "variant_id": "v2",
+      "variant_type": "normalized_roman",
+      "query_text": "pakistan ka capital kya hai",
+      "generation_method": "conservative_rules",
+      "source_query": "pakistan ka capital kya hai",
+      "accepted": false,
+      "semantic_similarity": 1.0,
+      "decision_reason": "rejected_duplicate"
+    },
+    {
+      "variant_id": "v3",
+      "variant_type": "urdu_script",
+      "query_text": "پاکستان کا capital کیا ہے",
+      "generation_method": "supporting_lexicon_positional_alignment",
+      "source_query": "pakistan ka capital kya hai",
+      "accepted": true,
+      "semantic_similarity": 0.913508,
+      "decision_reason": "accepted_similarity_threshold"
+    },
+    {
+      "variant_id": "v4",
+      "variant_type": "retrieval_oriented",
+      "query_text": "پاکستان کا capital معلومات",
+      "generation_method": "controlled_question_word_removal",
+      "source_query": "pakistan ka capital kya hai",
+      "accepted": true,
+      "semantic_similarity": 0.900253,
+      "decision_reason": "accepted_similarity_threshold"
+    }
+  ],
+  "retrieval_trace": [
+    {
+      "passage_id": "58191-p0000-b39fd7c03fbb",
+      "score": 0.04918032786885246,
+      "rank": 1,
+      "route": "rrf",
+      "contributing_routes": [
+        "dense:v1:original",
+        "dense:v3:urdu_script",
+        "dense:v4:retrieval_oriented"
+      ]
+    },
+    {
+      "passage_id": "55009-p0358-259229ba0e0a",
+      "score": 0.04817150063051703,
+      "rank": 2,
+      "route": "rrf",
+      "contributing_routes": [
+        "bm25:v1:original",
+        "bm25:v3:urdu_script",
+        "bm25:v4:retrieval_oriented"
+      ]
+    },
+    {
+      "passage_id": "55009-p0067-2a1a77de3d2e",
+      "score": 0.04762704813108039,
+      "rank": 3,
+      "route": "rrf",
+      "contributing_routes": [
+        "bm25:v1:original",
+        "bm25:v3:urdu_script",
+        "bm25:v4:retrieval_oriented"
+      ]
+    },
+    {
+      "passage_id": "103795-p0000-c8285cd2a22a",
+      "score": 0.04491192699490662,
+      "rank": 4,
+      "route": "rrf",
+      "contributing_routes": [
+        "dense:v1:original",
+        "dense:v3:urdu_script",
+        "dense:v4:retrieval_oriented"
+      ]
+    },
+    {
+      "passage_id": "55009-p0127-4e36980ca792",
+      "score": 0.044613880742913004,
+      "rank": 5,
+      "route": "rrf",
+      "contributing_routes": [
+        "bm25:v1:original",
+        "bm25:v3:urdu_script",
+        "bm25:v4:retrieval_oriented"
+      ]
+    },
+    {
+      "passage_id": "710407-p0000-49b16e5caea2",
+      "score": 0.04429804634257156,
+      "rank": 6,
+      "route": "rrf",
+      "contributing_routes": [
+        "bm25:v1:original",
+        "dense:v1:original",
+        "dense:v3:urdu_script"
+      ]
+    },
+    {
+      "passage_id": "320882-p0000-28d64d5a3e65",
+      "score": 0.0423249299719888,
+      "rank": 7,
+      "route": "rrf",
+      "contributing_routes": [
+        "dense:v1:original",
+        "dense:v3:urdu_script",
+        "dense:v4:retrieval_oriented"
+      ]
+    },
+    {
+      "passage_id": "786825-p0012-411c3c769841",
+      "score": 0.04224114025844379,
+      "rank": 8,
+      "route": "rrf",
+      "contributing_routes": [
+        "dense:v1:original",
+        "dense:v3:urdu_script",
+        "dense:v4:retrieval_oriented"
+      ]
+    },
+    {
+      "passage_id": "620183-p0000-6fd91c123a40",
+      "score": 0.04213125548726954,
+      "rank": 9,
+      "route": "rrf",
+      "contributing_routes": [
+        "dense:v1:original",
+        "dense:v3:urdu_script",
+        "dense:v4:retrieval_oriented"
+      ]
+    },
+    {
+      "passage_id": "26869-p0000-ca32c597db2f",
+      "score": 0.03125763125763126,
+      "rank": 10,
+      "route": "rrf",
+      "contributing_routes": [
+        "dense:v3:urdu_script",
+        "dense:v4:retrieval_oriented"
+      ]
+    }
+  ],
+  "latency_ms": {
+    "retrieval": 381.505,
+    "answer_selection": 1396.865,
+    "total": 1778.37
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "domains": {
+    "culture": 1921,
+    "general": 2265,
+    "geography": 2943,
+    "history": 5644,
+    "pakistan": 2500,
+    "science": 1079
+  },
+  "mean_tokens": 135.92,
+  "passages": 16352
+}

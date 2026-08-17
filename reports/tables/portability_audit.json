@@ -1,0 +1,73 @@
+{
+  "checks": {
+    "backend_sources_present": {
+      "detail": [
+        "backend\\app\\main.py",
+        "backend\\app\\models.py",
+        "backend\\app\\service.py"
+      ],
+      "passed": true
+    },
+    "diagnostic_split_frozen": {
+      "detail": {
+        "development": 120,
+        "test": 60
+      },
+      "passed": true
+    },
+    "embedding_checksum": {
+      "detail": "80a612c09c88768c8def7dbe852125f0520afa97f8b88c4b4e6a06d22283bc9a",
+      "passed": true
+    },
+    "frontend_build_present": {
+      "detail": "frontend/dist/index.html",
+      "passed": true
+    },
+    "frontend_generated_dirs_ignored": {
+      "detail": "venv, node_modules, and dist are removable",
+      "passed": true
+    },
+    "frontend_lock_present": {
+      "detail": "frontend\\pnpm-lock.yaml",
+      "passed": true
+    },
+    "locked_test_unused": {
+      "detail": "6 reports inspected",
+      "passed": true
+    },
+    "no_machine_specific_source_paths": {
+      "detail": "all source/config paths are relative",
+      "passed": true
+    },
+    "notebooks_executed": {
+      "detail": [
+        "01_dataset_setup.ipynb",
+        "02_eda_and_preprocessing.ipynb",
+        "03_baseline_retrieval.ipynb",
+        "04_querybridge.ipynb",
+        "05_ablation.ipynb",
+        "06_robustness.ipynb",
+        "07_error_analysis.ipynb"
+      ],
+      "passed": true
+    },
+    "passage_checksum": {
+      "detail": "47648cf679facb9a576841542289767f854c1a27aca6cb8e14e3f3eb1a2e5671",
+      "passed": true
+    },
+    "python_dependencies_pinned": {
+      "detail": "19 exact pins",
+      "passed": true
+    },
+    "python_supported": {
+      "detail": "3.12.13",
+      "passed": true
+    }
+  },
+  "limitations": [
+    "Independent native-speaker review remains pending.",
+    "A fresh PC must recreate .venv and frontend/node_modules; model/data artifacts must be copied or regenerated.",
+    "The locked test split remains intentionally unevaluated."
+  ],
+  "status": "passed"
+}

@@ -1,0 +1,15 @@
+# Runtime dependencies; install only inside .venv.
+datasets==3.1.0
+numpy==2.1.3
+pandas==2.2.3
+PyYAML==6.0.2
+rank-bm25==0.2.2
+scikit-learn==1.5.2
+sentence-transformers==3.3.1
+transformers==4.46.3
+truststore==0.10.4
+fastapi==0.115.5
+pydantic==2.10.2
+uvicorn==0.32.1
+psutil==6.1.0
+reportlab==4.2.5
