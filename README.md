@@ -9,10 +9,18 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/HasnatKhan010/raabta/actions/workflows/ci.yml"><img src="https://github.com/HasnatKhan010/raabta/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <img src="https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white" alt="Python 3.11+">
   <img src="https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white" alt="FastAPI">
   <img src="https://img.shields.io/badge/React-Vite-61DAFB?logo=react&logoColor=black" alt="React + Vite">
-  <img src="https://img.shields.io/badge/CPU--only-no%20GPU%20required-green" alt="CPU-only">
+  <img src="https://img.shields.io/badge/CPU--only-no%20GPU%20required-brightgreen" alt="CPU-only">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/code%20style-ruff-261230?logo=ruff&logoColor=D7FF64" alt="Ruff">
+  <img src="https://img.shields.io/badge/tests-pytest-0A9EDC?logo=pytest&logoColor=white" alt="Pytest">
+  <img src="https://img.shields.io/badge/platform-Windows-0078D4?logo=windows&logoColor=white" alt="Windows">
+  <img src="https://img.shields.io/badge/contributions-welcome-brightgreen" alt="Contributions Welcome">
   <img src="https://img.shields.io/badge/License-TBD-lightgrey" alt="License">
 </p>
 
