@@ -79,23 +79,26 @@ def main() -> None:
         embedding_manifest["embedding_sha256"],
     )
 
-    diagnostic_path = ROOT / "data/diagnostic/raabta_diagnostic_codex.csv"
+    diagnostic_path = ROOT / "data/diagnostic/raabta_diagnostic.csv"
     with diagnostic_path.open(encoding="utf-8-sig", newline="") as handle:
         splits: dict[str, int] = {}
         for row in csv.DictReader(handle):
             splits[row["split"]] = splits.get(row["split"], 0) + 1
     record("diagnostic_split_frozen", splits == {"development": 120, "test": 60}, splits)
 
-    evaluation_reports = sorted((ROOT / "reports/tables").glob("provisional_*.json"))
+    evaluation_reports = sorted((ROOT / "reports/tables").glob("*.json"))
     violations = []
+    inspected = 0
     for path in evaluation_reports:
         payload = json.loads(path.read_text(encoding="utf-8"))
-        if "test_queries_used" in payload and payload["test_queries_used"] != 0:
-            violations.append(path.name)
+        if "test_queries_used" in payload:
+            inspected += 1
+            if payload["test_queries_used"] != 0:
+                violations.append(path.name)
     record(
         "locked_test_unused",
         not violations,
-        violations or f"{len(evaluation_reports)} reports inspected",
+        violations or f"{inspected} evaluation reports inspected",
     )
 
     notebook_paths = sorted((ROOT / "notebooks").glob("[0-9][0-9]_*.ipynb"))
@@ -159,7 +162,7 @@ def main() -> None:
         "status": "passed" if passed else "failed",
         "checks": checks,
         "limitations": [
-            "Independent native-speaker review remains pending.",
+            "External language review is outside the assignment scope.",
             "A fresh PC must recreate .venv and frontend/node_modules; model/data artifacts must be copied or regenerated.",
             "The locked test split remains intentionally unevaluated.",
         ],

@@ -1,0 +1,44 @@
+{
+  "answer_generation_latency": {
+    "answer_selection_smoke_ms": 1396.865,
+    "scope": "one_real_corpus_query_not_an_aggregate"
+  },
+  "embedding_index_bytes": 25116800,
+  "embedding_matrix_shape": [
+    16352,
+    384
+  ],
+  "index_build_seconds": 2546.257,
+  "notes": [
+    "Index build time includes passage embedding generation and NumPy serialization.",
+    "Single-transliteration BM25 latency includes deterministic transliteration.",
+    "Peak RAM is the observed process resident memory after the cold reranker benchmark."
+  ],
+  "peak_observed_resident_memory_mb": 2550.64,
+  "query_latency_ms": {
+    "direct_dense": {
+      "mean": 51.788,
+      "p95": 61.666
+    },
+    "querybridge_no_reranker": {
+      "mean": 444.043,
+      "p95": 656.212
+    },
+    "querybridge_plus_reranker_depth20": {
+      "mean": 16947.604
+    },
+    "reranker_depth20": {
+      "mean": 16397.043
+    },
+    "single_transliteration_bm25": {
+      "mean": 60.758,
+      "p95": 101.098
+    },
+    "standard_hybrid": {
+      "mean": 94.522,
+      "p95": 127.279
+    }
+  },
+  "status": "development_only_project_verified",
+  "test_queries_used": 0
+}

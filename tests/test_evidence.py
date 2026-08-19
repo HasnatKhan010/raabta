@@ -74,6 +74,51 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(answer.evidence, ())
         self.assertIsNotNone(answer.abstention_reason)
 
+    def test_sentence_validator_selects_matching_evidence_type(self) -> None:
+        passage = Passage(
+            passage_id="p1",
+            article_id="a1",
+            title="محمد علی جناح",
+            url="https://example.test/jinnah",
+            domain="history",
+            passage_index=0,
+            passage_text="وہ ایک سیاسی رہنما تھے۔ اسلام آباد میں 25 دسمبر 1876 کو پیدا ہوئے۔",
+            token_count=12,
+        )
+        candidate = SearchResult("p1", 0.9, 1, "reranker", ("reranker",))
+        answer = ExtractiveAnswerer(FixedEncoder(), max_sentences=1).answer(
+            "وہ کب پیدا ہوئے",
+            [candidate],
+            {"p1": passage},
+            sentence_validator=lambda sentence: any(character.isdigit() for character in sentence),
+        )
+
+        self.assertTrue(answer.supported)
+        self.assertIn("1876", answer.answer)
+
+    def test_candidate_depth_prevents_unvalidated_lower_source_from_answering(self) -> None:
+        top = Passage("p1", "a1", "اوّل", "url1", "general", 0, "غیر متعلق متن۔", 3)
+        lower = Passage(
+            "p2",
+            "a2",
+            "دوسرا",
+            "url2",
+            "general",
+            0,
+            "اسلام آباد پاکستان کا دارالحکومت ہے۔",
+            5,
+        )
+        candidates = [
+            SearchResult("p1", 0.9, 1, "reranker"),
+            SearchResult("p2", 0.8, 2, "reranker"),
+        ]
+
+        answer = ExtractiveAnswerer(FixedEncoder(), candidate_depth=1).answer(
+            "پاکستان کا دارالحکومت", candidates, {"p1": top, "p2": lower}
+        )
+
+        self.assertFalse(answer.supported)
+
 
 if __name__ == "__main__":
     unittest.main()

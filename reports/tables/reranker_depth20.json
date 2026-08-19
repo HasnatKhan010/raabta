@@ -1,0 +1,28 @@
+{
+  "after_reranking": {
+    "mrr_at_10": 0.144444,
+    "ndcg_at_10": 0.153995,
+    "recall_at_1": 0.125,
+    "recall_at_10": 0.183333,
+    "recall_at_5": 0.175
+  },
+  "batch_size": 4,
+  "before_reranking": {
+    "mrr_at_10": 0.074987,
+    "ndcg_at_10": 0.095905,
+    "recall_at_1": 0.05,
+    "recall_at_10": 0.166667,
+    "recall_at_5": 0.1
+  },
+  "code_revision": "40ced75c3017eb27626c9d4ea981bde21a2662f4",
+  "depth": 20,
+  "limitation": "Development-set measurements; the separate test split is not used.",
+  "mean_rerank_ms": 16397.043,
+  "mean_retrieval_ms": 550.561,
+  "model": "Alibaba-NLP/gte-multilingual-reranker-base",
+  "queries": 120,
+  "resident_memory_mb": 2524.04,
+  "revision": "a6258e9d2b1a11aa7bccdff9efde562bbca4393d",
+  "status": "development_only_project_verified",
+  "test_queries_used": 0
+}

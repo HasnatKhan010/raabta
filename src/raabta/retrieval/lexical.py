@@ -17,11 +17,16 @@ def lexical_tokens(text: str) -> list[str]:
 
 
 class BM25Retriever:
-    def __init__(self, passages: list[Passage]) -> None:
+    def __init__(self, passages: list[Passage], *, title_boost: int = 3) -> None:
         if not passages:
             raise ValueError("passages must not be empty")
+        if title_boost < 0:
+            raise ValueError("title_boost must not be negative")
         self.passages = passages
-        tokenized = [lexical_tokens(item.passage_text) for item in passages]
+        tokenized = [
+            lexical_tokens(item.passage_text) + lexical_tokens(item.title) * title_boost
+            for item in passages
+        ]
         self._token_sets = [set(tokens) for tokens in tokenized]
         self.index = BM25Okapi(tokenized)
 

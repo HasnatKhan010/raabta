@@ -1,4 +1,10 @@
-# Research paper
+# Assignment paper
 
-The LaTeX paper and compiled PDF are Phase 11 deliverables. The Results section will be written only after the frozen final experiments produce real measurements.
+`main.tex` is the generated source and `main.pdf` is the compiled assignment report. Rebuild both from the measured JSON reports with:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\build_final_paper.py
+```
+
+The report uses development-set measurements only; the locked test split remains unused.
 

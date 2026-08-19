@@ -10,7 +10,11 @@ from raabta.retrieval.models import SearchResult
 
 
 class FakeCrossEncoder:
+    def __init__(self):
+        self.pairs = []
+
     def predict(self, pairs, **kwargs):
+        self.pairs = pairs
         return np.asarray([0.2, 0.9], dtype=np.float32)
 
 
@@ -30,6 +34,7 @@ class RerankingTests(unittest.TestCase):
         output = reranker.rerank("query", candidates, passages)
         self.assertEqual(output[0].passage_id, "p2")
         self.assertIn("reranker", output[0].contributing_routes)
+        self.assertEqual(reranker.model.pairs[0], ("query", "one\nfirst"))
 
 
 if __name__ == "__main__":

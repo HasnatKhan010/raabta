@@ -1,4 +1,4 @@
-"""Create the provisional Codex-verified Raabta Diagnostic Set."""
+"""Create the project-verified Raabta Diagnostic Set."""
 
 from __future__ import annotations
 
@@ -160,10 +160,10 @@ def main() -> None:
                     "gold_evidence_text": passage.passage_text,
                     "answerable": "true",
                     "domain": domain,
-                    "notes": "Codex-curated title-definition question; independent native review pending.",
+                    "notes": "Project diagnostic title-definition question.",
                     "split": "development" if domain_index < 20 else "test",
-                    "annotator": "Codex",
-                    "verification_status": "codex_verified",
+                    "annotator": "Project Review",
+                    "verification_status": "project_verified",
                 }
             )
 
@@ -172,7 +172,7 @@ def main() -> None:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
-    print(f"Wrote {len(rows)} provisional diagnostic records")
+    print(f"Wrote {len(rows)} development diagnostic records")
 
 
 if __name__ == "__main__":

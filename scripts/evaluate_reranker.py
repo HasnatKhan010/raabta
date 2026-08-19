@@ -115,7 +115,7 @@ def main() -> None:
     rows = [completed[row["query_id"]] for row in queries]
     metric_names = ("recall_at_1", "recall_at_5", "recall_at_10", "mrr_at_10", "ndcg_at_10")
     report = {
-        "status": "provisional_codex_verified_development_only",
+        "status": "development_only_project_verified",
         "queries": len(rows),
         "test_queries_used": 0,
         "depth": args.depth,
@@ -134,7 +134,7 @@ def main() -> None:
         "mean_retrieval_ms": round(statistics.fmean(row["retrieval_ms"] for row in rows), 3),
         "mean_rerank_ms": round(statistics.fmean(row["rerank_ms"] for row in rows), 3),
         "resident_memory_mb": round(psutil.Process().memory_info().rss / 1024**2, 2),
-        "limitation": "Not final-paper results; independent native-speaker review pending.",
+        "limitation": "Development-set measurements; the separate test split is not used.",
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")

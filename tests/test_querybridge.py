@@ -51,6 +51,20 @@ class QueryBridgeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             bridge.generate("  ")
 
+    def test_query_glossary_converts_common_factual_terms_and_aliases(self) -> None:
+        transliterator = SupportingLexiconTransliterator(self.lexicon_path)
+        converted, coverage = transliterator.transliterate_with_coverage(
+            "quaid-e-azam kb paida hue"
+        )
+        self.assertEqual(converted, "قائد اعظم کب پیدا ہوئے")
+        self.assertEqual(coverage, 1.0)
+
+        converted, coverage = transliterator.transliterate_with_coverage(
+            "pakistan ka capital kya hai"
+        )
+        self.assertEqual(converted, "پاکستان کا دارالحکومت کیا ہے")
+        self.assertEqual(coverage, 1.0)
+
     def test_configured_generation_removes_requested_components(self) -> None:
         bridge = QueryBridge(SupportingLexiconTransliterator(self.lexicon_path), SimilarEncoder())
         variants = bridge.generate_configured(

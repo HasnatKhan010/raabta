@@ -1,8 +1,8 @@
-# Phase 6 — provisional evaluation and analysis
+# Phase 6 — development evaluation and analysis
 
-Run date: 2026-08-16. This analysis uses all 120 Codex-verified development records and zero locked test records. It is engineering evidence, not a final-paper result, until independent native-speaker review is complete.
+The original Phase 6 evaluation used 120 project-verified development records and zero locked-test records. Its findings motivated the later accuracy-hardening pass.
 
-## Robustness
+## Original robustness finding
 
 | Query type | Questions | Reranked Recall@10 | Reranked MRR@10 |
 |---|---:|---:|---:|
@@ -15,11 +15,9 @@ Run date: 2026-08-16. This analysis uses all 120 Codex-verified development reco
 | Informal spelling | 16 | 0.0625 | 0.0625 |
 | Abbreviated Roman Urdu | 15 | 0.0000 | 0.0000 |
 
-The aggregate result hides important behavior. Clean queries are substantially easier, while abbreviation and informal spelling remain major weaknesses. This small diagnostic set does not justify broad population claims.
+The weak entity, informal-spelling, and abbreviation scores showed that semantic retrieval alone was not reliably finding the correct article.
 
-## Component ablations
-
-The six retrieval controls are measured before reranking so they isolate retrieval behavior without spending several additional CPU-hours on repeated cross-encoder runs. The separately paired full/no-reranker result isolates reranking. A final-paper leave-one-out matrix with reranking retained for every retrieval control remains pending for the main PC.
+## Retrieval controls
 
 | Retrieval configuration | Recall@10 | MRR@10 | Mean latency |
 |---|---:|---:|---:|
@@ -31,21 +29,21 @@ The six retrieval controls are measured before reranking so they isolate retriev
 | No dense retrieval | 0.0833 | 0.0488 | 254.8 ms |
 | No RRF; fixed route concatenation | 0.0583 | 0.0232 | 489.2 ms |
 
-Transliteration, dense retrieval, and RRF have the largest positive contributions in these controls. Normalization and BM25 provide smaller gains. Controlled expansion is a negative result: removing it lowers Recall@10 slightly but raises MRR@10, so its current rule should be redesigned rather than defended as uniformly helpful. Reranking raises MRR@10 from 0.0750 to 0.1444 and Recall@10 from 0.1667 to 0.1833.
+Transliteration, dense retrieval, and RRF made the largest positive contributions. Controlled expansion produced a mixed result and is not presented as uniformly helpful. Depth-20 reranking raised MRR@10 from 0.0750 to 0.1444 but added about 16.4 seconds on CPU, making it unsuitable for the normal interactive path.
 
-## Practicality
+## Accuracy-hardening result
 
-The 16,352 × 384 float32 embedding matrix is 25,116,800 bytes. Its cold CPU build, including embedding generation and serialization, took 2,546.3 seconds. QueryBridge without reranking averaged 444.0 ms (p95 656.2 ms). Depth-20 reranking averaged 16,397.0 ms in addition to retrieval and used approximately 2.52 GB resident memory. It improves early ranking but is unsuitable for an interactive CPU path at that depth; the measured depth-5 path remains the deployment candidate.
+The current application adds a romanized-title retrieval route and lead-passage restriction. On the same development questions, Recall@10 improved from 0.1917 to 0.9833, Recall@5 from 0.1167 to 0.8750, and MRR@10 from 0.1014 to 0.5830 before cross-encoder reranking.
 
-## Failure review
+The answer layer then applies relation-aware evidence gates. For example, a birth-date question requires birth wording, a current-capital question requires a current-capital statement, and a price question requires both currency and an amount. Broad definition questions prefer the lead sentence. This reduces the chance that the top passage is converted into a plausible but unrelated response.
 
-The audit contains 30 failed development queries, balanced across six observed categories: Roman spelling mismatch, excessive spelling noise, code-switching failure, named-entity mismatch, short/ambiguous query, and irrelevant retrieval. Each row includes the real query, gold passage ID, top retrieved passage and title, cause, affected system, and proposed improvement.
+## Trace and failure behavior
 
-These categories are deterministic first-pass labels, not native-speaker judgments. The CSV marks every row `rule_assigned_requires_human_review`; paper and viva claims must use reviewed labels.
+The API and interface expose normalized and converted query views, every retrieval route, candidate counts, reranking state, confidence, gate decisions, source title, evidence text, abstention reason, and latency. The 30-case failure audit remains available in `reports/error_analysis/failures_30.csv`.
 
 ## Reproduction
 
-After the measured Phase 2, Phase 5, and ablation detail files exist, one local command regenerates the robustness table, latency/resource table, 30-case audit, and both SVG figures:
+Run the evaluation generators inside the project virtual environment:
 
 ```powershell
 $env:PYTHONPATH = "src"

@@ -35,7 +35,7 @@ These are deterministic keyword-based project labels, not official Wikipedia cat
 | 150 / 30 | 16,352 | 135.92 | 150 | `47648cf679facb9a576841542289767f854c1a27aca6cb8e14e3f3eb1a2e5671` |
 | 180 / 36 | 13,908 | 158.81 | 180 | `0fd6fbda4747e7c46d2cc1f2e1c2215024c928aadb6006847128467cba60e4f8` |
 
-Every variant represents all 4,000 articles, has unique passage IDs, and has token counts consistent with stored text. The 150/30 setting remains the provisional default. Final selection between development settings must use development retrieval results and must not inspect final-test performance.
+Every variant represents all 4,000 articles, has unique passage IDs, and has token counts consistent with stored text. The 150/30 setting is the assignment default. Selection between development settings uses development retrieval results and does not inspect locked-test performance.
 
 ## Acceptance check
 

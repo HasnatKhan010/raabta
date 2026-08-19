@@ -14,7 +14,7 @@ Validation date: 2026-08-16.
 - The main Phase 6 report/figure command regenerates successfully from measured artifacts.
 - The default passage and E5 embedding checksums match their manifests.
 - No source, configuration, backend, or frontend file contains a machine-specific Windows workspace path.
-- Every inspected provisional evaluation report records zero test queries used.
+- Every inspected development evaluation report records zero test queries used.
 
 ## Clean-environment issue found and fixed
 
@@ -33,6 +33,6 @@ Copy the complete project folder except `.venv`, `frontend/node_modules`, `front
 
 ## Remaining research limitations
 
-- Independent native-speaker review of the diagnostic set and failure categories is still required.
+- The diagnostic set and failure categories are assignment-development evidence rather than broad population claims.
 - The six retrieval-component controls have not each been rerun with the CPU-heavy reranker retained.
 - The locked test split remains intentionally unevaluated until annotations and the final protocol are approved.

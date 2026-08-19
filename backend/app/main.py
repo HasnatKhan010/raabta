@@ -24,7 +24,7 @@ REQUIRED_ARTIFACTS = (
 
 
 class Engine(Protocol):
-    def query(self, query: str, research_mode: bool = False) -> dict: ...
+    def query(self, query: str, research_mode: bool = False, live_search: bool = False) -> dict: ...
     def compare(self, query: str, gold_passage_id: str | None = None) -> dict: ...
     def source(self, passage_id: str) -> dict | None: ...
 
@@ -57,14 +57,18 @@ def create_app(engine: Engine | None = None) -> FastAPI:
         return {
             "answer_mode": "extractive",
             "reranker_interactive": True,
+            "live_wikipedia_default": False,
             "evidence_threshold": 0.70,
-            "candidate_depth": 5,
+            "reranker_relevance_threshold": RaabtaEngine.minimum_reranker_score,
+            "retrieval_candidate_depth": 20,
+            "answer_source_depth": 1,
+            "romanized_title_route": True,
             "offline_local_models": True,
         }
 
     @application.post("/api/query", response_model=QueryResponse)
     def query(payload: QueryRequest, request: Request) -> dict:
-        return get_engine(request).query(payload.query, payload.research_mode)
+        return get_engine(request).query(payload.query, payload.research_mode, payload.live_search)
 
     @application.post("/api/compare")
     def compare(payload: CompareRequest, request: Request) -> dict:

@@ -52,7 +52,14 @@ class MultilingualReranker:
             raise ValueError("query must not be empty")
         if not candidates:
             return []
-        pairs = [(query, passages_by_id[item.passage_id].passage_text) for item in candidates]
+        pairs = [
+            (
+                query,
+                f"{passages_by_id[item.passage_id].title}\n"
+                f"{passages_by_id[item.passage_id].passage_text}",
+            )
+            for item in candidates
+        ]
         scores = self.model.predict(
             pairs,
             batch_size=self.batch_size,

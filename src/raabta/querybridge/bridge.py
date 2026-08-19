@@ -10,6 +10,62 @@ from pathlib import Path
 from raabta.preprocessing.text import normalize_roman_urdu
 from raabta.retrieval.dense import Encoder, normalize_rows
 
+_QUERY_GLOSSARY = {
+    "allama": "علامہ",
+    "azam": "اعظم",
+    "area": "رقبہ",
+    "biggest": "سب سے بڑا",
+    "born": "پیدا",
+    "capital": "دارالحکومت",
+    "city": "شہر",
+    "country": "ملک",
+    "currency": "کرنسی",
+    "death": "وفات",
+    "died": "وفات",
+    "founder": "بانی",
+    "how": "کیسے",
+    "hoye": "ہوئے",
+    "hue": "ہوئے",
+    "hai": "ہے",
+    "hain": "ہیں",
+    "hy": "ہے",
+    "iphone": "آئی فون",
+    "iqbal": "اقبال",
+    "kahan": "کہاں",
+    "ka": "کا",
+    "kab": "کب",
+    "kaun": "کون",
+    "ke": "کے",
+    "ki": "کی",
+    "kon": "کون",
+    "kya": "کیا",
+    "language": "زبان",
+    "largest": "سب سے بڑا",
+    "minister": "وزیر",
+    "mein": "میں",
+    "paida": "پیدا",
+    "peda": "پیدا",
+    "population": "آبادی",
+    "president": "صدر",
+    "price": "قیمت",
+    "province": "صوبہ",
+    "qaid": "قائد",
+    "qauid": "قائد",
+    "quaid": "قائد",
+    "river": "دریا",
+    "when": "کب",
+    "where": "کہاں",
+    "what": "کیا",
+    "who": "کون",
+    "year": "سال",
+}
+
+_QUERY_PHRASES = {
+    ("prime", "minister"): ("وزیر", "اعظم"),
+    ("quaid", "e", "azam"): ("قائد", "اعظم"),
+    ("qaid", "e", "azam"): ("قائد", "اعظم"),
+}
+
 
 @dataclass(frozen=True, slots=True)
 class QueryVariant:
@@ -21,6 +77,7 @@ class QueryVariant:
     accepted: bool
     semantic_similarity: float
     decision_reason: str
+    transliteration_coverage: float = 1.0
 
 
 class SupportingLexiconTransliterator:
@@ -28,10 +85,46 @@ class SupportingLexiconTransliterator:
         payload = json.loads(path.read_text(encoding="utf-8"))
         self.entries = {key: value["urdu"] for key, value in payload["entries"].items()}
 
-    def transliterate(self, query: str, *, normalize_input: bool = True) -> str:
+    def transliterate_with_coverage(
+        self, query: str, *, normalize_input: bool = True
+    ) -> tuple[str, float]:
         source = normalize_roman_urdu(query) if normalize_input else query.casefold().strip()
+        source = re.sub(r"[-_]+", " ", source)
         tokens = re.findall(r"[a-z0-9]+|[^\w\s]", source)
-        return " ".join(self.entries.get(token, token) for token in tokens)
+        converted: list[str] = []
+        converted_words = 0
+        word_count = 0
+        index = 0
+        while index < len(tokens):
+            token = tokens[index]
+            if re.fullmatch(r"[a-z0-9]+", token):
+                word_count += 1
+                matched_phrase = False
+                for phrase, replacement in _QUERY_PHRASES.items():
+                    window = tuple(tokens[index : index + len(phrase)])
+                    if window == phrase:
+                        converted.extend(replacement)
+                        converted_words += len(phrase)
+                        word_count += len(phrase) - 1
+                        index += len(phrase)
+                        matched_phrase = True
+                        break
+                if matched_phrase:
+                    continue
+                replacement = _QUERY_GLOSSARY.get(token) or self.entries.get(token)
+                if replacement:
+                    converted.append(replacement)
+                    converted_words += 1
+                else:
+                    converted.append(token)
+            else:
+                converted.append(token)
+            index += 1
+        coverage = converted_words / max(1, word_count)
+        return " ".join(converted), round(coverage, 6)
+
+    def transliterate(self, query: str, *, normalize_input: bool = True) -> str:
+        return self.transliterate_with_coverage(query, normalize_input=normalize_input)[0]
 
 
 class QueryBridge:
@@ -64,8 +157,9 @@ class QueryBridge:
         if use_normalization:
             candidates.append(("normalized_roman", working, "conservative_rules"))
         transformed = working
+        transliteration_coverage = 1.0
         if use_transliteration:
-            transformed = self.transliterator.transliterate(
+            transformed, transliteration_coverage = self.transliterator.transliterate_with_coverage(
                 working, normalize_input=use_normalization
             )
             candidates.append(
@@ -116,6 +210,9 @@ class QueryBridge:
                     accepted,
                     round(float(similarity), 6),
                     reason,
+                    transliteration_coverage
+                    if variant_type in {"urdu_script", "retrieval_oriented"}
+                    else 1.0,
                 )
             )
             seen.add(text)

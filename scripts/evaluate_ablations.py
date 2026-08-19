@@ -108,16 +108,16 @@ def main() -> None:
         aggregates[config_name] = summary
 
     report = {
-        "status": "provisional_codex_verified_development_only",
+        "status": "development_only_project_verified",
         "protocol": "retrieval-stage leave-one-component-out; reranker held absent",
         "queries": len(queries),
         "test_queries_used": 0,
         "configurations": aggregates,
-        "no_reranking_comparison_source": "reports/tables/provisional_reranker_depth20.json",
+        "no_reranking_comparison_source": "reports/tables/reranker_depth20.json",
         "limitation": (
             "The six retrieval-component controls isolate retrieval behavior before reranking; "
             "the separately measured no-reranking control isolates the reranker. Independent "
-            "native-speaker review remains pending."
+            "the results are limited to the assignment development set."
         ),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

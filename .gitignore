@@ -7,6 +7,8 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.cache/
+build/
 frontend/node_modules/
 frontend/dist/
 frontend/*.tsbuildinfo
@@ -27,8 +29,8 @@ Thumbs.db
 data/raw/
 data/processed/
 data/diagnostic/annotation_queue.csv
-# The provisional set contains redistributed source evidence; review licensing before publishing.
-data/diagnostic/raabta_diagnostic_codex.csv
+# The development set contains redistributed source evidence; keep it local.
+data/diagnostic/raabta_diagnostic.csv
 artifacts/models/
 artifacts/embeddings/
 artifacts/indexes/
@@ -44,6 +46,7 @@ work/
 
 # Output deliverables (large binary files)
 outputs/
+docs/viva_preparation.md
 
 # Compiled TypeScript config artifacts
 frontend/vite.config.js

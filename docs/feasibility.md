@@ -7,7 +7,7 @@ Assessment date: 2026-08-16. Links below point to primary project/model pages.
 - [Wikimedia `20231101.ur`](https://huggingface.co/datasets/wikimedia/wikipedia/tree/3e1f92c331f318af862b87e2319ed5dc26d80f5d/20231101.ur) is present at the pinned dataset revision as one Parquet shard. Its card metadata reports 200,154 examples, 167,627,869 download bytes, and CC BY-SA 3.0/GFDL licenses. The project scan retained 4,000 articles without loading the complete corpus into memory.
 - [Roman-Urdu-Parl-split](https://huggingface.co/datasets/Mavkif/Roman-Urdu-Parl-split) declares Apache-2.0 and documents 6,365,808 original pairs. Its training CSV is shown as roughly 1.19 GB, so the pipeline must stream a fixed development sample rather than load the file in memory.
 
-Dataset licenses govern the downloaded content independently of this repository's code license. Attribution and redistribution terms must be reviewed before publishing processed text.
+Dataset licenses govern the downloaded content independently of this repository's code license. Attribution and redistribution terms apply whenever processed text is shared.
 
 ## Models
 

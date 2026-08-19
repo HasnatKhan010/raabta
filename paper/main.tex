@@ -3,22 +3,22 @@
 \usepackage{booktabs,graphicx,hyperref,xcolor}
 \title{Raabta: Script-Aware Multi-Query Reformulation and Evidence Retrieval for Roman-Urdu Questions}
 \author{Hasnat Khan}
-\date{Development study -- 16 August 2026}
+\date{Assignment project report -- 20 August 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
-Roman Urdu is common in digital communication but lacks standard spelling and often mixes with English, while much authoritative content remains in Urdu script. Raabta studies a CPU-first retrieval pipeline that preserves the original query, applies conservative normalization, generates controlled Roman and Urdu-script variants, retrieves through BM25 and multilingual dense routes, combines rankings using reciprocal rank fusion, and optionally reranks a small candidate set. On 120 automatically curated and programmatically checked development questions, QueryBridge raised Recall@10 from 0.0917 for direct dense retrieval to 0.1667; depth-20 reranking raised MRR@10 from 0.0750 to 0.1444. The 60-question test set remains locked and independent native-speaker review is pending.
+Raabta is a CPU-first Roman-Urdu information-retrieval system that connects noisy Latin-script questions to traceable Urdu evidence. The final application combines QueryBridge variants, Urdu BM25, multilingual dense retrieval, character-level matching against romanized Urdu article titles, reciprocal rank fusion, multilingual reranking, and conservative evidence validation. On the 120-question development split, adding romanized-title retrieval increased Recall@10 from 0.1917 to 0.9833 and MRR@10 from 0.1014 to 0.5830 before reranking. The interface displays each search stage, retrieval route, validation gate, source, score, and abstention reason.
 \end{abstract}
 \section{Introduction}
-Raabta asks whether controlled script-aware query representations improve retrieval over a fixed Urdu Wikipedia corpus. The contribution is narrower than prior Roman-Urdu benchmark work: it studies multi-query reformulation, complementary retrieval routes, transparent fusion, lightweight reranking, and evidence-first answering.
+Roman Urdu has no single standard spelling and is frequently mixed with English. Raabta addresses the resulting script mismatch as a retrieval problem: it searches a fixed Urdu Wikipedia corpus, ranks evidence, and either returns an exact sourced sentence or abstains.
 \section{Data and protocol}
-The frozen corpus contains 4,000 Urdu Wikipedia articles and 16,352 overlapping passages of 150 tokens with 30-token overlap. A 180-question diagnostic set covers six domains and eight query types, split into 120 development and 60 locked test questions before tuning.
+The local corpus contains 4,000 Urdu Wikipedia articles and 16,352 overlapping passages. The project diagnostic set contains 180 evidence-linked questions across six domains and eight noise categories. The 120-question development split is used for engineering evaluation; the separate 60-question test split is not used in the reported measurements.
 \section{Method}
-QueryBridge produces at most four traceable representations: original, normalized Roman Urdu, Urdu-script transliteration, and a retrieval-oriented variant. Variants below a semantic-similarity threshold are rejected. Accepted variants independently traverse BM25 and multilingual E5 retrieval routes and are fused with reciprocal rank fusion. A pinned multilingual cross-encoder reranks the top 20 offline. Answers are exact evidence sentences with a source URL or an explicit abstention.
+QueryBridge produces original, normalized Roman, Urdu-script, and retrieval-oriented query forms. A romanized-title index converts one lead title per article with uroman and uses character 2--4 grams to tolerate missing vowels and informal spellings. Title, BM25, and multilingual E5 routes are fused, then the top 20 candidates are reranked using title plus passage text. The answer layer checks relevance, query-to-source alignment, sentence similarity, requested answer type, temporal relation, and navigation boilerplate. Extraction is restricted to the validated source.
 \section{Results}
-Development-only measurements show QueryBridge Recall@10 of 0.1667 and MRR@10 of 0.0750. Reranking improves Recall@10 to 0.1833 and MRR@10 to 0.1444, at a mean reranking latency of 16.4 seconds on CPU. Ablations identify transliteration, dense retrieval, and rank fusion as the strongest positive contributors. Controlled expansion is not uniformly helpful.
+The original application pipeline reached Recall@1/5/10 of 0.0750/0.1167/0.1917 and MRR@10 of 0.1014. With romanized-title retrieval, the same development check reached 0.3917/0.8750/0.9833 and MRR@10 of 0.5830. End-to-end tests additionally verify relation-aware evidence selection and safe refusal for unsupported price questions.
 \section{Limitations and conclusion}
-The annotations and first-pass failure categories require independent native-speaker review. The diagnostic set uses deterministic title-definition construction and is not globally representative. The test set has not been evaluated. Within those limits, the development evidence supports continuing script-aware multi-query retrieval while redesigning expansion and using a shallower reranker for interactive deployment.
+The diagnostic set is title-oriented, the corpus is limited to 4,000 articles, and development retrieval scores are not the same as answer accuracy. Live Urdu Wikipedia broadens encyclopedic coverage but is not a source for dependable current shopping prices. Within this assignment scope, Raabta demonstrates substantially stronger noisy-entity retrieval, strict evidence grounding, and a transparent user interface.
 \bibliographystyle{plain}
 \bibliography{references}
 \end{document}

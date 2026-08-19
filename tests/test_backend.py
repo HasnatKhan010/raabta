@@ -8,7 +8,7 @@ from backend.app.main import create_app
 
 
 class FakeEngine:
-    def query(self, query: str, research_mode: bool = False) -> dict:
+    def query(self, query: str, research_mode: bool = False, live_search: bool = False) -> dict:
         return {
             "query": query,
             "supported": True,
@@ -19,6 +19,11 @@ class FakeEngine:
             "retrieval_trace": [],
             "scores": {"best_evidence_similarity": 0.9},
             "latency_ms": {"retrieval": 1.0, "answer_selection": 2.0, "total": 3.0},
+            "pipeline": {
+                "mode": "local_corpus",
+                "decision": "answer",
+                "live_search_requested": live_search,
+            },
             "abstention_reason": None,
             "research_comparison": {"enabled": True} if research_mode else None,
         }
@@ -60,10 +65,14 @@ class BackendTests(unittest.TestCase):
         self.assertEqual(response.headers["access-control-allow-origin"], "http://127.0.0.1:5173")
 
     def test_query_contract_and_validation(self) -> None:
-        response = self.client.post("/api/query", json={"query": "sawal", "research_mode": True})
+        response = self.client.post(
+            "/api/query",
+            json={"query": "sawal", "research_mode": True, "live_search": True},
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["answer"], "ثبوت۔")
         self.assertIsNotNone(response.json()["research_comparison"])
+        self.assertTrue(response.json()["pipeline"]["live_search_requested"])
         self.assertEqual(self.client.post("/api/query", json={"query": "   "}).status_code, 422)
 
     def test_compare_and_source_endpoints(self) -> None:

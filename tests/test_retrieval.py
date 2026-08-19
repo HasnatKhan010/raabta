@@ -45,6 +45,35 @@ class RetrievalTests(unittest.TestCase):
         items = [passage("p1", "اسلام آباد"), passage("p2", "اردو ادب")]
         self.assertEqual(BM25Retriever(items).search("unmatched roman tokens"), [])
 
+    def test_bm25_indexes_and_boosts_article_titles(self) -> None:
+        items = [
+            Passage(
+                "p1",
+                "a1",
+                "قائد اعظم",
+                "https://example.invalid/1",
+                "general",
+                0,
+                "بانی پاکستان",
+                2,
+            ),
+            Passage(
+                "p2",
+                "a2",
+                "دوسرا مضمون",
+                "https://example.invalid/2",
+                "general",
+                0,
+                "قائد کا عمومی ذکر",
+                3,
+            ),
+            passage("p3", "اردو ادب"),
+            passage("p4", "سائنس اور ٹیکنالوجی"),
+            passage("p5", "تاریخ عالم"),
+        ]
+        results = BM25Retriever(items, title_boost=3).search("قائد اعظم", top_k=2)
+        self.assertEqual(results[0].passage_id, "p1")
+
     def test_dense_retrieval_uses_aligned_embeddings(self) -> None:
         items = [passage("p1", "اسلام آباد"), passage("p2", "ادب")]
         results = DenseRetriever(items, np.eye(2, dtype=np.float32), FakeEncoder()).search("اسلام")

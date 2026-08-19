@@ -13,7 +13,7 @@ Large or licensed datasets are not committed. `sample/articles.jsonl` is clearly
 
 The diagnostic set must contain 150–200 manually verified underlying questions, including answerable and out-of-corpus cases. The required specification fields are present, plus `split`, `annotator`, and `verification_status` audit fields. Gold evidence must be copied exactly from the frozen corpus. Query authors must not see the final test gold passage while authoring QueryBridge rules.
 
-Allowed `verification_status` progression: `draft`, `codex_verified`, `human_verified`. Provisional engineering evaluation may use `codex_verified` development records with an explicit limitation. Only independently reviewed `human_verified` records may support final-paper claims. Splits are assigned once and stored, not regenerated during experiments.
+Allowed `verification_status` progression: `draft`, `project_verified`, `human_verified`. This assignment evaluates only `project_verified` development records and labels them accordingly. Splits are assigned once and stored, not regenerated during experiments.
 
 ## Source and license notes
 

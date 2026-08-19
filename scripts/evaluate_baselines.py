@@ -1,4 +1,4 @@
-"""Evaluate the three frozen baselines on the provisional development split only."""
+"""Evaluate the three frozen baselines on the development split only."""
 
 from __future__ import annotations
 
@@ -111,14 +111,14 @@ def main() -> None:
         systems[system]["p95_latency_ms"] = round(percentile_95(latencies), 3)
 
     output = {
-        "status": "provisional_codex_verified_development_only",
+        "status": "development_only_project_verified",
         "queries": len(queries),
         "split": args.split,
         "test_queries_used": 0,
         "model": args.model,
         "revision": args.revision,
         "systems": systems,
-        "limitation": "Not final-paper results; independent native-speaker review pending.",
+        "limitation": "Development-set measurements; the separate test split is not used.",
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8")

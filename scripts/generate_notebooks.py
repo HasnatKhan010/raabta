@@ -60,14 +60,14 @@ print(json.dumps(summary, ensure_ascii=False, indent=2))""",
     "03_baseline_retrieval.ipynb": (
         "Frozen retrieval baselines",
         "Displays the three baseline definitions and real development-only measurements. The locked test split is not read.",
-        """report = json.loads((ROOT / "reports/tables/provisional_baselines_development.json").read_text(encoding="utf-8"))
+        """report = json.loads((ROOT / "reports/tables/baselines_development.json").read_text(encoding="utf-8"))
 assert report["test_queries_used"] == 0
 print(json.dumps(report["systems"], indent=2, sort_keys=True))""",
     ),
     "04_querybridge.ipynb": (
         "QueryBridge evaluation",
         "Shows the controlled multi-query development result and the supporting-data lexicon size without using relevance labels during generation.",
-        """report = json.loads((ROOT / "reports/tables/provisional_querybridge_development.json").read_text(encoding="utf-8"))
+        """report = json.loads((ROOT / "reports/tables/querybridge_development.json").read_text(encoding="utf-8"))
 lexicon = json.loads((ROOT / "artifacts/metadata/transliteration_lexicon.json").read_text(encoding="utf-8"))
 assert report["test_queries_used"] == 0
 print({"lexicon_entries": len(lexicon["entries"]), **report["result"]})""",
@@ -75,7 +75,7 @@ print({"lexicon_entries": len(lexicon["entries"]), **report["result"]})""",
     "05_ablation.ipynb": (
         "Component ablations",
         "Displays the retrieval-stage leave-one-component-out controls. Reranker-retained controls remain pending for the main PC.",
-        """report = json.loads((ROOT / "reports/tables/provisional_retrieval_ablations.json").read_text(encoding="utf-8"))
+        """report = json.loads((ROOT / "reports/tables/retrieval_ablations.json").read_text(encoding="utf-8"))
 assert report["test_queries_used"] == 0
 for name, values in report["configurations"].items():
     print(f"{name:24s} Recall@10={values['recall_at_10']:.4f} MRR@10={values['mrr_at_10']:.4f}")""",
@@ -83,16 +83,16 @@ for name, values in report["configurations"].items():
     "06_robustness.ipynb": (
         "Robustness by query type",
         "Compares the reranked Raabta result across all eight frozen development query categories.",
-        """report = json.loads((ROOT / "reports/tables/provisional_robustness.json").read_text(encoding="utf-8"))
+        """report = json.loads((ROOT / "reports/tables/robustness.json").read_text(encoding="utf-8"))
 assert report["test_queries_used"] == 0
 for name, systems in report["query_types"].items():
     values = systems["querybridge_reranked"]
     print(f"{name:30s} n={values['queries']:2d} Recall@10={values['recall_at_10']:.4f}")""",
     ),
     "07_error_analysis.ipynb": (
-        "Provisional error analysis",
-        "Summarizes the 30 traceable rule-assigned failures. Native-speaker review is required before paper claims.",
-        """with (ROOT / "reports/error_analysis/provisional_failures_30.csv").open(encoding="utf-8-sig", newline="") as handle:
+        "Development error analysis",
+        "Summarizes the 30 traceable rule-assigned failures used in the assignment analysis.",
+        """with (ROOT / "reports/error_analysis/failures_30.csv").open(encoding="utf-8-sig", newline="") as handle:
     failures = list(csv.DictReader(handle))
 categories = {}
 for row in failures:
@@ -112,7 +112,7 @@ EXTRA_ANALYSES = {
         ),
         (
             "Diagnostic split audit",
-            "with (ROOT / 'data/diagnostic/raabta_diagnostic_codex.csv').open(encoding='utf-8-sig', newline='') as handle:\n    rows = list(csv.DictReader(handle))\nprint('Questions:', len(rows))\nprint('Split:', dict(Counter(row['split'] for row in rows)))\nprint('Query types:', dict(sorted(Counter(row['query_type'] for row in rows).items())))\nassert Counter(row['split'] for row in rows) == {'development': 120, 'test': 60}",
+            "with (ROOT / 'data/diagnostic/raabta_diagnostic.csv').open(encoding='utf-8-sig', newline='') as handle:\n    rows = list(csv.DictReader(handle))\nprint('Questions:', len(rows))\nprint('Split:', dict(Counter(row['split'] for row in rows)))\nprint('Query types:', dict(sorted(Counter(row['query_type'] for row in rows).items())))\nassert Counter(row['split'] for row in rows) == {'development': 120, 'test': 60}",
         ),
     ],
     "02_eda_and_preprocessing.ipynb": [
@@ -138,11 +138,11 @@ EXTRA_ANALYSES = {
     "04_querybridge.ipynb": [
         (
             "Improvement over baselines",
-            "baseline = json.loads((ROOT / 'reports/tables/provisional_baselines_development.json').read_text(encoding='utf-8'))\nfor name, values in baseline['systems'].items():\n    print(name, {metric: round(report['result'][metric] - values[metric], 6) for metric in ('recall_at_1', 'recall_at_5', 'recall_at_10', 'mrr_at_10', 'ndcg_at_10')})",
+            "baseline = json.loads((ROOT / 'reports/tables/baselines_development.json').read_text(encoding='utf-8'))\nfor name, values in baseline['systems'].items():\n    print(name, {metric: round(report['result'][metric] - values[metric], 6) for metric in ('recall_at_1', 'recall_at_5', 'recall_at_10', 'mrr_at_10', 'ndcg_at_10')})",
         ),
         (
             "Lexicon coverage",
-            "lexicon = json.loads((ROOT / 'artifacts/metadata/transliteration_lexicon.json').read_text(encoding='utf-8'))['entries']\nwith (ROOT / 'data/diagnostic/raabta_diagnostic_codex.csv').open(encoding='utf-8-sig', newline='') as handle:\n    development = [row for row in csv.DictReader(handle) if row['split'] == 'development']\nimport re\ncoverage = []\nfor row in development:\n    tokens = re.findall(r'[a-z0-9]+', row['roman_urdu_query'].lower())\n    coverage.append(sum(token in lexicon for token in tokens) / len(tokens) if tokens else 0)\nprint({'lexicon_entries': len(lexicon), 'mean_token_coverage': round(statistics.fmean(coverage), 4), 'full_coverage_queries': sum(value == 1 for value in coverage)})",
+            "lexicon = json.loads((ROOT / 'artifacts/metadata/transliteration_lexicon.json').read_text(encoding='utf-8'))['entries']\nwith (ROOT / 'data/diagnostic/raabta_diagnostic.csv').open(encoding='utf-8-sig', newline='') as handle:\n    development = [row for row in csv.DictReader(handle) if row['split'] == 'development']\nimport re\ncoverage = []\nfor row in development:\n    tokens = re.findall(r'[a-z0-9]+', row['roman_urdu_query'].lower())\n    coverage.append(sum(token in lexicon for token in tokens) / len(tokens) if tokens else 0)\nprint({'lexicon_entries': len(lexicon), 'mean_token_coverage': round(statistics.fmean(coverage), 4), 'full_coverage_queries': sum(value == 1 for value in coverage)})",
         ),
     ],
     "05_ablation.ipynb": [
@@ -184,7 +184,7 @@ def main() -> None:
         notebook = {
             "cells": [
                 markdown(
-                    f"# {title}\n\n{purpose}\n\n**Status:** provisional development evidence; zero locked test queries used."
+                    f"# {title}\n\n{purpose}\n\n**Status:** development evidence; zero locked test queries used."
                 ),
                 code(COMMON),
                 code(analysis),

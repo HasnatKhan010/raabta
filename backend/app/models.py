@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field, field_validator
 class QueryRequest(BaseModel):
     query: str = Field(min_length=1, max_length=500)
     research_mode: bool = False
+    live_search: bool = False
 
     @field_validator("query")
     @classmethod
@@ -31,6 +32,7 @@ class QueryResponse(BaseModel):
     retrieval_trace: list[dict[str, Any]]
     scores: dict[str, float]
     latency_ms: dict[str, float]
+    pipeline: dict[str, Any]
     abstention_reason: str | None = None
     research_comparison: dict[str, Any] | None = None
 

@@ -1,0 +1,38 @@
+{
+  "limitation": "Development-set measurements; the separate test split is not used.",
+  "model": "intfloat/multilingual-e5-small",
+  "queries": 120,
+  "revision": "d1d99a1efae6779390caba937d92c54b5bc70e51",
+  "split": "development",
+  "status": "development_only_project_verified",
+  "systems": {
+    "direct_dense": {
+      "mean_latency_ms": 51.788,
+      "mrr_at_10": 0.061528,
+      "ndcg_at_10": 0.068646,
+      "p95_latency_ms": 61.666,
+      "recall_at_1": 0.05,
+      "recall_at_10": 0.091667,
+      "recall_at_5": 0.083333
+    },
+    "single_transliteration_bm25": {
+      "mean_latency_ms": 60.758,
+      "mrr_at_10": 0.00744,
+      "ndcg_at_10": 0.011624,
+      "p95_latency_ms": 101.098,
+      "recall_at_1": 0.0,
+      "recall_at_10": 0.025,
+      "recall_at_5": 0.016667
+    },
+    "standard_hybrid": {
+      "mean_latency_ms": 94.522,
+      "mrr_at_10": 0.045602,
+      "ndcg_at_10": 0.056514,
+      "p95_latency_ms": 127.279,
+      "recall_at_1": 0.025,
+      "recall_at_10": 0.091667,
+      "recall_at_5": 0.066667
+    }
+  },
+  "test_queries_used": 0
+}

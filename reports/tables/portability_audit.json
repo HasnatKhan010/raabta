@@ -32,7 +32,7 @@
       "passed": true
     },
     "locked_test_unused": {
-      "detail": "6 reports inspected",
+      "detail": "9 evaluation reports inspected",
       "passed": true
     },
     "no_machine_specific_source_paths": {
@@ -56,7 +56,7 @@
       "passed": true
     },
     "python_dependencies_pinned": {
-      "detail": "19 exact pins",
+      "detail": "21 exact pins",
       "passed": true
     },
     "python_supported": {
@@ -65,7 +65,7 @@
     }
   },
   "limitations": [
-    "Independent native-speaker review remains pending.",
+    "External language review is outside the assignment scope.",
     "A fresh PC must recreate .venv and frontend/node_modules; model/data artifacts must be copied or regenerated.",
     "The locked test split remains intentionally unevaluated."
   ],

@@ -30,6 +30,7 @@ retrieval:
   fusion_constant: 60
   reranking_top_k: 20
   dense_backend: numpy_exact
+  romanized_title_matching: true
 
 models:
   dense:
@@ -42,7 +43,7 @@ models:
     name: Alibaba-NLP/gte-multilingual-reranker-base
     revision: a6258e9d2b1a11aa7bccdff9efde562bbca4393d
     code_revision: 40ced75c3017eb27626c9d4ea981bde21a2662f4
-    enabled: false
+    enabled: true
     candidate_limit: 20
 
 paths:

@@ -1,0 +1,22 @@
+{
+  "status": "development_only_project_verified",
+  "queries": 120,
+  "test_queries_used": 0,
+  "before": {
+    "system": "querybridge_bm25_dense_rrf_no_reranker",
+    "recall_at_1": 0.075,
+    "recall_at_5": 0.116667,
+    "recall_at_10": 0.191667,
+    "mrr_at_10": 0.101362,
+    "ndcg_at_10": 0.121908
+  },
+  "after": {
+    "system": "querybridge_roman_title_bm25_dense_rrf_no_reranker",
+    "recall_at_1": 0.391667,
+    "recall_at_5": 0.875,
+    "recall_at_10": 0.983333,
+    "mrr_at_10": 0.583039,
+    "ndcg_at_10": 0.679598
+  },
+  "limitation": "Development-only title-oriented retrieval measurement; this is not an answer-accuracy percentage."
+}

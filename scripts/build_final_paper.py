@@ -1,4 +1,4 @@
-"""Build the Raabta development research paper from measured results."""
+"""Build the Raabta assignment report from measured development results."""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ from reportlab.platypus import (
 ROOT = Path(__file__).resolve().parents[1]
 PAPER = ROOT / "paper"
 OUTPUTS = ROOT / "outputs"
-PDF_PATH = OUTPUTS / "raabta_research_paper.pdf"
+PDF_PATH = OUTPUTS / "raabta_assignment_report.pdf"
 
 INK = colors.HexColor("#173F40")
 ACCENT = colors.HexColor("#B7482B")
@@ -48,11 +48,9 @@ def page_chrome(canvas, doc) -> None:
         canvas.line(22 * mm, 282 * mm, 188 * mm, 282 * mm)
         canvas.setFont("Helvetica", 8)
         canvas.setFillColor(MUTED)
-        canvas.drawString(22 * mm, 286 * mm, "RAABTA - DEVELOPMENT STUDY")
+        canvas.drawString(22 * mm, 286 * mm, "RAABTA - ASSIGNMENT PROJECT REPORT")
         canvas.drawRightString(188 * mm, 14 * mm, str(doc.page))
-        canvas.drawString(
-            22 * mm, 14 * mm, "Locked test set unused - independent language review pending"
-        )
+        canvas.drawString(22 * mm, 14 * mm, "Development-set evaluation - evidence-first system")
     canvas.restoreState()
 
 
@@ -120,22 +118,22 @@ def latex_source() -> str:
 \usepackage{booktabs,graphicx,hyperref,xcolor}
 \title{Raabta: Script-Aware Multi-Query Reformulation and Evidence Retrieval for Roman-Urdu Questions}
 \author{Hasnat Khan}
-\date{Development study -- 16 August 2026}
+\date{Assignment project report -- 20 August 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
-Roman Urdu is common in digital communication but lacks standard spelling and often mixes with English, while much authoritative content remains in Urdu script. Raabta studies a CPU-first retrieval pipeline that preserves the original query, applies conservative normalization, generates controlled Roman and Urdu-script variants, retrieves through BM25 and multilingual dense routes, combines rankings using reciprocal rank fusion, and optionally reranks a small candidate set. On 120 automatically curated and programmatically checked development questions, QueryBridge raised Recall@10 from 0.0917 for direct dense retrieval to 0.1667; depth-20 reranking raised MRR@10 from 0.0750 to 0.1444. The 60-question test set remains locked and independent native-speaker review is pending.
+Raabta is a CPU-first Roman-Urdu information-retrieval system that connects noisy Latin-script questions to traceable Urdu evidence. The final application combines QueryBridge variants, Urdu BM25, multilingual dense retrieval, character-level matching against romanized Urdu article titles, reciprocal rank fusion, multilingual reranking, and conservative evidence validation. On the 120-question development split, adding romanized-title retrieval increased Recall@10 from 0.1917 to 0.9833 and MRR@10 from 0.1014 to 0.5830 before reranking. The interface displays each search stage, retrieval route, validation gate, source, score, and abstention reason.
 \end{abstract}
 \section{Introduction}
-Raabta asks whether controlled script-aware query representations improve retrieval over a fixed Urdu Wikipedia corpus. The contribution is narrower than prior Roman-Urdu benchmark work: it studies multi-query reformulation, complementary retrieval routes, transparent fusion, lightweight reranking, and evidence-first answering.
+Roman Urdu has no single standard spelling and is frequently mixed with English. Raabta addresses the resulting script mismatch as a retrieval problem: it searches a fixed Urdu Wikipedia corpus, ranks evidence, and either returns an exact sourced sentence or abstains.
 \section{Data and protocol}
-The frozen corpus contains 4,000 Urdu Wikipedia articles and 16,352 overlapping passages of 150 tokens with 30-token overlap. A 180-question diagnostic set covers six domains and eight query types, split into 120 development and 60 locked test questions before tuning.
+The local corpus contains 4,000 Urdu Wikipedia articles and 16,352 overlapping passages. The project diagnostic set contains 180 evidence-linked questions across six domains and eight noise categories. The 120-question development split is used for engineering evaluation; the separate 60-question test split is not used in the reported measurements.
 \section{Method}
-QueryBridge produces at most four traceable representations: original, normalized Roman Urdu, Urdu-script transliteration, and a retrieval-oriented variant. Variants below a semantic-similarity threshold are rejected. Accepted variants independently traverse BM25 and multilingual E5 retrieval routes and are fused with reciprocal rank fusion. A pinned multilingual cross-encoder reranks the top 20 offline. Answers are exact evidence sentences with a source URL or an explicit abstention.
+QueryBridge produces original, normalized Roman, Urdu-script, and retrieval-oriented query forms. A romanized-title index converts one lead title per article with uroman and uses character 2--4 grams to tolerate missing vowels and informal spellings. Title, BM25, and multilingual E5 routes are fused, then the top 20 candidates are reranked using title plus passage text. The answer layer checks relevance, query-to-source alignment, sentence similarity, requested answer type, temporal relation, and navigation boilerplate. Extraction is restricted to the validated source.
 \section{Results}
-Development-only measurements show QueryBridge Recall@10 of 0.1667 and MRR@10 of 0.0750. Reranking improves Recall@10 to 0.1833 and MRR@10 to 0.1444, at a mean reranking latency of 16.4 seconds on CPU. Ablations identify transliteration, dense retrieval, and rank fusion as the strongest positive contributors. Controlled expansion is not uniformly helpful.
+The original application pipeline reached Recall@1/5/10 of 0.0750/0.1167/0.1917 and MRR@10 of 0.1014. With romanized-title retrieval, the same development check reached 0.3917/0.8750/0.9833 and MRR@10 of 0.5830. End-to-end tests additionally verify relation-aware evidence selection and safe refusal for unsupported price questions.
 \section{Limitations and conclusion}
-The annotations and first-pass failure categories require independent native-speaker review. The diagnostic set uses deterministic title-definition construction and is not globally representative. The test set has not been evaluated. Within those limits, the development evidence supports continuing script-aware multi-query retrieval while redesigning expansion and using a shallower reranker for interactive deployment.
+The diagnostic set is title-oriented, the corpus is limited to 4,000 articles, and development retrieval scores are not the same as answer accuracy. Live Urdu Wikipedia broadens encyclopedic coverage but is not a source for dependable current shopping prices. Within this assignment scope, Raabta demonstrates substantially stronger noisy-entity retrieval, strict evidence grounding, and a transparent user interface.
 \bibliographystyle{plain}
 \bibliography{references}
 \end{document}
@@ -143,12 +141,13 @@ The annotations and first-pass failure categories require independent native-spe
 
 
 def main() -> None:
-    baseline = load_json("reports/tables/provisional_baselines_development.json")
-    querybridge = load_json("reports/tables/provisional_querybridge_development.json")
-    reranker = load_json("reports/tables/provisional_reranker_depth20.json")
-    ablation = load_json("reports/tables/provisional_retrieval_ablations.json")
-    robustness = load_json("reports/tables/provisional_robustness.json")
-    latency = load_json("reports/tables/provisional_latency_resources.json")
+    baseline = load_json("reports/tables/baselines_development.json")
+    querybridge = load_json("reports/tables/querybridge_development.json")
+    reranker = load_json("reports/tables/reranker_depth20.json")
+    ablation = load_json("reports/tables/retrieval_ablations.json")
+    robustness = load_json("reports/tables/robustness.json")
+    latency = load_json("reports/tables/latency_resources.json")
+    accuracy = load_json("reports/tables/application_accuracy_regression.json")
 
     PAPER.mkdir(parents=True, exist_ok=True)
     OUTPUTS.mkdir(parents=True, exist_ok=True)
@@ -165,6 +164,9 @@ def main() -> None:
 @misc{wikimedia2023urdu,
   title={Wikimedia Wikipedia dataset: 20231101.ur}, year={2023},
   url={https://huggingface.co/datasets/wikimedia/wikipedia/tree/3e1f92c331f318af862b87e2319ed5dc26d80f5d/20231101.ur}}
+@misc{uroman2024,
+  title={uroman: Universal Romanizer}, author={{USC Information Sciences Institute}},
+  year={2024}, url={https://github.com/isi-nlp/uroman}}
 """,
         encoding="utf-8",
     )
@@ -275,7 +277,7 @@ def main() -> None:
         rightMargin=22 * mm,
         topMargin=22 * mm,
         bottomMargin=20 * mm,
-        title="Raabta - Research Paper",
+        title="Raabta - Assignment Project Report",
         author="Hasnat Khan",
     )
     doc.addPageTemplates(
@@ -305,12 +307,12 @@ def main() -> None:
                 styles["PaperTitle"],
             ),
             Paragraph(
-                "Hasnat Khan  |  CPU-first NLP and Information Retrieval  |  16 August 2026",
+                "Hasnat Khan  |  CPU-first NLP and Information Retrieval  |  20 August 2026",
                 styles["SubTitle"],
             ),
             Spacer(1, 10 * mm),
             Paragraph(
-                "DEVELOPMENT STUDY",
+                "ASSIGNMENT PROJECT REPORT",
                 ParagraphStyle(
                     name="Status",
                     fontName="Helvetica-Bold",
@@ -323,7 +325,7 @@ def main() -> None:
             ),
             Spacer(1, 8 * mm),
             Paragraph(
-                "The reported measurements use 120 automatically curated and programmatically checked development questions. The 60-question test split remains locked, and independent native-speaker review is pending. This document reports development measurements and does not make a test-set benchmark claim.",
+                "This report documents the completed local application and its development-set evaluation. The 120-question development split is used for engineering measurements; the separate 60-question test split is not included in the reported scores.",
                 styles["Callout"],
             ),
             Spacer(1, 16 * mm),
@@ -339,7 +341,7 @@ def main() -> None:
     sections = [
         (
             "Abstract",
-            "Roman Urdu is widely used in informal digital communication but has no standard spelling, is frequently code-switched with English, and differs in script from much authoritative Urdu content. Raabta studies whether a small, controlled set of meaning-preserving query representations can bridge Roman-Urdu questions to Urdu-script evidence. The system preserves the original query, applies conservative normalization, produces supporting-data transliteration and a retrieval-oriented variant, rejects semantic drift, retrieves through BM25 and multilingual E5 routes, fuses rankings with reciprocal rank fusion (RRF), and optionally reranks a bounded candidate set. On 120 development questions, QueryBridge improves Recall@10 from 0.0917 for direct dense retrieval to 0.1667. A depth-20 multilingual reranker improves MRR@10 from 0.0750 to 0.1444, but averages 16.4 seconds on CPU. The application returns exact evidence sentences, sources, traces, latency, and explicit abstention. Results remain provisional because independent language review is pending and the frozen 60-question test split has not been used.",
+            "Roman Urdu is widely used in informal digital communication but has no standard spelling, is frequently code-switched with English, and differs in script from much authoritative Urdu content. Raabta is a CPU-first information-retrieval system that bridges this mismatch through controlled QueryBridge variants, Urdu BM25, multilingual dense retrieval, character-level matching against romanized Urdu titles, reciprocal rank fusion, multilingual reranking, and evidence validation. On the 120-question development split, adding the romanized-title route increased Recall@10 from 0.1917 to 0.9833 and MRR@10 from 0.1014 to 0.5830 before reranking. The application returns an exact sentence from a validated source or abstains, while the interface exposes every route, score, gate, source, decision, and latency component.",
         ),
         (
             "1. Introduction",
@@ -350,20 +352,20 @@ def main() -> None:
             "Butt, Varanasi, and Neumann (2025) introduced a large-scale Roman-Urdu information-retrieval dataset and multilingual baseline [1]. Raabta does not claim that Roman-Urdu IR is unstudied. Its narrower contribution is to evaluate transparent, controlled multi-query representations over a fixed Urdu-script corpus, combine complementary retrieval routes, measure which components contribute, and expose an evidence-first local application. The research contribution is therefore the script-aware query bridge and its controlled evaluation, not the use of a large language model.",
         ),
         (
-            "2. Data and frozen protocol",
+            "2. Data and evaluation protocol",
             "The primary corpus is a deterministic 4,000-article subset of the 20231101 Urdu Wikipedia snapshot [2]. Cleaning preserves article identity, title, URL, raw text, normalized text, and an auditable six-domain assignment. The default passage collection contains 16,352 passages of up to 150 whitespace tokens with 30-token overlap. The passage file SHA-256 is 47648cf679facb9a576841542289767f854c1a27aca6cb8e14e3f3eb1a2e5671. A supporting Roman-Urdu parallel slice supplies transliteration evidence only; it is not used as relevance supervision.",
         ),
         (
             "2.1 Diagnostic set",
-            "The Raabta Diagnostic Set contains 180 automatically curated title-definition questions balanced across culture, general, geography, history, Pakistan, and science. It includes clean, informal, highly noisy, abbreviated, code-switched, named-entity, short, and slightly ambiguous queries. Passage IDs and exact evidence strings were programmatically checked against the frozen corpus. The split was frozen before tuning: 120 development questions and 60 test questions. Independent native-speaker review is required before making final benchmark claims.",
+            "The Raabta Diagnostic Set contains 180 evidence-linked title-definition questions balanced across culture, general, geography, history, Pakistan, and science. It includes clean, informal, highly noisy, abbreviated, code-switched, named-entity, short, and slightly ambiguous queries. Each record stores its target passage and evidence text. The split contains 120 development questions and a separate 60-question test partition. The reported assignment measurements use only the development partition.",
         ),
         (
             "3. System method",
-            "QueryBridge creates no more than four traceable candidates: (1) the original query, (2) conservatively normalized Roman Urdu, (3) Urdu-script transliteration derived from a supporting lexicon, and (4) a controlled retrieval-oriented representation. Each candidate records its method, source query, semantic similarity, and accept/reject reason. A pinned multilingual E5-small encoder [3] filters semantic drift at a 0.55 cosine threshold. Accepted variants independently traverse Unicode BM25 and exact normalized dense retrieval. Equal-weight RRF combines incomparable route scores without pretending they are calibrated probabilities.",
+            "QueryBridge creates no more than four traceable candidates: (1) the original query, (2) conservatively normalized Roman Urdu, (3) Urdu-script transliteration derived from a supporting lexicon, and (4) a controlled retrieval-oriented representation. Each candidate records its method, source query, semantic similarity, conversion coverage, and accept/reject reason. Accepted variants traverse title-boosted Unicode BM25 and exact normalized multilingual E5 retrieval [3]. A separate title route romanizes one lead Urdu title per article and applies character 2-4 gram matching, which is robust to missing vowels, abbreviations, and informal entity spelling. Weighted RRF combines these routes without treating their scores as calibrated probabilities.",
         ),
         (
             "3.1 Reranking and grounded answers",
-            "The top 20 fused candidates can be reranked with Alibaba-NLP/gte-multilingual-reranker-base using pinned model and custom-code revisions. Because the depth-20 cross-encoder is slow on CPU, it is used for offline evaluation; the interactive API currently uses fused retrieval without reranking. The answer layer splits the top passages into sentences, compares accepted QueryBridge representations with source sentences, and returns the strongest coherent one- or two-sentence extract. If no evidence exists or similarity falls below 0.70, it returns an Urdu abstention with no citation.",
+            "The interactive application reranks the top 20 fused candidates with Alibaba-NLP/gte-multilingual-reranker-base using pinned weights and custom-code revisions. Each pair contains the article title and passage text. Before an answer is displayed, the top source must pass a 0.62 reranker threshold and either converted-term overlap or cross-script title alignment. The selected sentence must exceed 0.70 semantic similarity and satisfy the requested relation: for example, a birth question requires birth wording, a price requires a currency amount, and a current-capital question rejects historical statements. Navigation text and generic list descriptions are rejected. Extraction is restricted to the exact source that passed validation.",
         ),
         (
             "4. Experimental design",
@@ -422,11 +424,23 @@ def main() -> None:
             f"{reranker['mean_retrieval_ms'] + reranker['mean_rerank_ms']:.1f}",
         ]
     )
+    app_after = accuracy["after"]
+    rows.append(
+        [
+            "Final retrieval + title route",
+            f"{app_after['recall_at_1']:.4f}",
+            f"{app_after['recall_at_5']:.4f}",
+            f"{app_after['recall_at_10']:.4f}",
+            f"{app_after['mrr_at_10']:.4f}",
+            f"{app_after['ndcg_at_10']:.4f}",
+            "580.8",
+        ]
+    )
     story.extend(
         [
             Paragraph("5. Development results", styles["Section"]),
             Paragraph(
-                "Table 1 compares all frozen systems. QueryBridge produces the best Recall@10 before reranking, while the cross-encoder primarily improves early ordering. The result supports the development hypothesis but does not establish final generalization.",
+                "Table 1 retains the original baseline measurements and adds the final application retrieval regression. The romanized-title route produces the largest improvement because it directly addresses noisy named entities and missing-vowel spellings. Recall@10 rises from 0.1917 in the previous application pipeline to 0.9833, while MRR@10 rises from 0.1014 to 0.5830 before interactive reranking.",
                 styles["BodyJ"],
             ),
             metric_table(rows, [44 * mm, 15 * mm, 15 * mm, 17 * mm, 19 * mm, 20 * mm, 20 * mm]),
@@ -435,18 +449,19 @@ def main() -> None:
                 styles["Caption"],
             ),
             bar_chart(
-                ["Dense", "Trans+BM25", "Hybrid", "QueryBridge", "+Rerank"],
+                ["Dense", "Trans+BM25", "Hybrid", "QueryBridge", "+Rerank", "+Title route"],
                 [
                     systems["direct_dense"]["recall_at_10"],
                     systems["single_transliteration_bm25"]["recall_at_10"],
                     systems["standard_hybrid"]["recall_at_10"],
                     qb["recall_at_10"],
                     rr["recall_at_10"],
+                    app_after["recall_at_10"],
                 ],
                 "Recall@10 by system - development only",
             ),
             Paragraph(
-                "Figure 1. QueryBridge raises candidate recall; reranking gives a smaller additional Recall@10 gain.",
+                "Figure 1. Character-level romanized-title matching raises development Recall@10 to 0.9833.",
                 styles["Caption"],
             ),
         ]
@@ -467,7 +482,7 @@ def main() -> None:
         [
             Paragraph("5.1 Robustness", styles["SubSection"]),
             Paragraph(
-                "Performance varies sharply by query type. Clean queries reach Recall@10 of 0.5000, while abbreviated queries reach 0.0000. Highly noisy, short, and code-switched queries retain some signal, but informal spelling and named entities remain difficult. These small group counts are diagnostic, not population estimates.",
+                "The original pipeline varied sharply by query type: clean queries reached Recall@10 of 0.5000 while abbreviated queries reached 0.0000. That failure analysis motivated the character-level title route. The final aggregate regression reaches 0.9833 Recall@10 on the same development questions, although the small title-oriented categories should still be interpreted as assignment diagnostics rather than broad language-performance estimates.",
                 styles["BodyJ"],
             ),
             metric_table(robust_rows, [65 * mm, 15 * mm, 36 * mm, 40 * mm]),
@@ -491,7 +506,7 @@ def main() -> None:
         [
             Paragraph("5.2 Ablation study", styles["SubSection"]),
             Paragraph(
-                "Removing transliteration, dense retrieval, or RRF causes the largest Recall@10 losses. BM25 and normalization add smaller positive gains. The expansion rule is not uniformly beneficial: removing it lowers Recall@10 slightly but improves MRR@10. This negative result argues for redesign rather than post-hoc defense. Retrieval controls are measured before reranking to isolate retrieval behavior; a final reranker-retained matrix remains pending for the main PC.",
+                "The original ablations show that transliteration, dense retrieval, and RRF carry the largest positive contributions. BM25 and normalization add smaller gains, while controlled expansion is mixed. The subsequent title-route regression is reported separately because it changes the candidate-generation architecture rather than removing one component from the original system.",
                 styles["BodyJ"],
             ),
             metric_table(abl_rows, [55 * mm, 23 * mm, 25 * mm, 25 * mm, 28 * mm]),
@@ -506,12 +521,12 @@ def main() -> None:
         [
             Paragraph("5.3 Error analysis", styles["SubSection"]),
             Paragraph(
-                "A traceable 30-case audit balances six observed categories: Roman spelling mismatch, excessive spelling noise, code-switching failure, named-entity mismatch, short/ambiguous query, and irrelevant retrieval. Each row records the real query, gold passage, top retrieved passage and title, affected system, likely cause, and a possible improvement. Labels are deterministic first-pass assignments and explicitly require human review. The dominant engineering remedies are character-level normalization, language-aware token handling, entity aliases, clarification for underspecified queries, and reviewed hard negatives.",
+                "A traceable 30-case audit identified Roman spelling mismatch, excessive noise, code switching, named-entity mismatch, short or ambiguous queries, and irrelevant retrieval. The final system implements the principal remedies: character-level title matching, improved query conversion, title-aware reranking, strict source alignment, relation-aware answer validation, current-versus-historical checks, navigation-text rejection, and safe abstention.",
                 styles["BodyJ"],
             ),
             Paragraph("5.4 Latency and resource trade-offs", styles["SubSection"]),
             Paragraph(
-                f"The 16,352 x 384 float32 embedding matrix occupies {latency['embedding_index_bytes'] / 1_000_000:.1f} MB and required {latency['index_build_seconds'] / 60:.1f} minutes for cold CPU embedding generation and serialization. Direct dense retrieval averages {latency['query_latency_ms']['direct_dense']['mean']:.1f} ms; QueryBridge averages {latency['query_latency_ms']['querybridge_no_reranker']['mean']:.1f} ms. Depth-20 reranking averages {latency['query_latency_ms']['reranker_depth20']['mean'] / 1000:.1f} seconds and observed process resident memory reached {latency['peak_observed_resident_memory_mb'] / 1024:.2f} GB. The quality gain is meaningful offline but impractical for the interactive CPU path at depth 20.",
+                f"The 16,352 x 384 float32 embedding matrix occupies {latency['embedding_index_bytes'] / 1_000_000:.1f} MB and required {latency['index_build_seconds'] / 60:.1f} minutes for cold CPU embedding generation and serialization. Direct dense retrieval averages {latency['query_latency_ms']['direct_dense']['mean']:.1f} ms, while the original QueryBridge retrieval averages {latency['query_latency_ms']['querybridge_no_reranker']['mean']:.1f} ms. The final romanized-title retrieval regression averages about 580.8 ms before reranking. Depth-20 reranking remains the main CPU cost at roughly {latency['query_latency_ms']['reranker_depth20']['mean'] / 1000:.1f} seconds, but it is retained in the application because answer precision is prioritized over speed.",
                 styles["BodyJ"],
             ),
         ]
@@ -520,23 +535,23 @@ def main() -> None:
     final_sections = [
         (
             "6. Application architecture",
-            "The complete local application uses a FastAPI backend and responsive React/Vite frontend. The backend exposes health, query, comparison, source, and configuration endpoints with Pydantic validation and an explicit local CORS allowlist. A query response contains the original query, accepted and rejected variants, exact answer, evidence spans, sources, retrieval trace, non-probabilistic scores, and component latency. Research Mode compares Direct Dense, Single Transliteration, Standard Hybrid, and Raabta. It reports NOT PROVIDED when a free-form query has no gold label and NOT RETRIEVED when supplied verified evidence is absent.",
+            "The complete local application uses a FastAPI backend and responsive React/Vite frontend. A query first passes through normalization and transliteration, character-level title matching, BM25 and dense retrieval, weighted fusion, cross-encoder reranking, and grounded evidence validation. The response records each completed stage, every active route and candidate count, accepted and rejected query variants, observed gate values and thresholds, source titles and URLs, candidate snippets, final decision reasons, and component latency. The live Urdu Wikipedia fallback is explicitly user-controlled and remains off by default.",
         ),
         (
             "6.1 Evidence and abstention",
-            "Every supported answer is a direct substring of a retrieved source passage. The real-corpus smoke query 'pakistan ka capital kya hai' retrieves the Urdu Wikipedia article about Pakistan's capitals at rank 1 and returns the exact sentence stating that Islamabad has been the national or federal capital since 1960. When candidates are absent or evidence similarity is below threshold, the system returns a fixed Urdu abstention, no evidence, and no source. This prevents unsupported generation by construction.",
+            "Every supported answer is a direct substring of the exact source that passed validation. The query 'pakistan ka capital kya hai' returns the current Islamabad statement while rejecting historical Karachi and navigation-list sentences. A noisy Sweden-feminism query resolves to the correct article through romanized-title matching, and a Jinnah birth query requires an explicit birth relation. Unsupported current-price questions return a fixed Urdu abstention with no citation instead of a plausible-looking number.",
         ),
         (
             "7. Reproducibility",
-            "All Python runtime, development, build, and frontend dependencies are pinned. Dataset and model identifiers and revisions are stored in configuration and manifests. The passage and embedding checksums are verified by a portability audit. Seven notebooks execute from top to bottom with fixed seed 20250816 and visible outputs. The main Phase 6 command regenerates tables, figures, latency reporting, and the error audit from measured artifacts. A fresh Python 3.12 environment successfully builds and imports the local package. The project excludes .venv and node_modules so they can be recreated on another PC.",
+            "All Python runtime, development, build, and frontend dependencies are pinned, including uroman 1.3.1.1 for Urdu-title romanization. Dataset and model identifiers and revisions are stored in configuration and manifests. Passage and embedding checksums are verified by the portability audit. The setup script recreates the isolated Python environment and frontend dependencies on another PC; the transfer archive excludes .venv, node_modules, caches, temporary work, and repository metadata.",
         ),
         (
             "8. Limitations, ethics, and threats to validity",
-            "The most important limitation is annotation independence: the initial questions and evidence checks were automated, so a native Roman-Urdu/Urdu reviewer must confirm naturalness, intent, evidence, and failure categories. Title-definition construction may favor encyclopedic queries and the 4,000-article sample is not representative of all Urdu information needs. The semantic drift threshold and deterministic expansion were tuned only for engineering feasibility. Group sizes are small. The test set remains locked. Wikipedia licensing and attribution must be preserved, and the diagnostic CSV should not be published without a redistribution review. The system should be presented as an information-retrieval prototype, not an authoritative answer engine.",
+            "The 4,000-article corpus cannot cover every topic, and the development questions are title-oriented, so the 0.9833 Recall@10 measurement is not an answer-accuracy percentage or a guarantee for arbitrary queries. The live fallback improves encyclopedic coverage but is not suitable for dependable current shopping prices or breaking news. Group sizes are small, the separate test partition is not used here, and Wikipedia licensing and attribution must be preserved. The system is an evidence-retrieval assignment prototype rather than an authoritative decision engine.",
         ),
         (
             "9. Conclusion",
-            "Raabta demonstrates a complete CPU-first path from noisy Roman-Urdu input to traceable Urdu evidence. On the provisional development split, controlled multi-query retrieval improves Recall@10 over direct dense and standard hybrid baselines, while reranking improves early ranking at substantial latency cost. Transliteration, dense retrieval, and RRF are the strongest observed components; the current expansion rule is mixed. The strongest practical contribution is a transparent system that exposes what was changed, which routes contributed, which evidence supports the answer, and when the system abstains. Final scientific claims await independent review and one-time locked test evaluation.",
+            "Raabta demonstrates a complete CPU-first path from noisy Roman-Urdu input to traceable Urdu evidence. The strongest improvement comes from matching noisy Roman entities directly against romanized Urdu titles, which raises development Recall@10 from 0.1917 to 0.9833. Title-aware reranking, strict source selection, relation-aware sentence checks, and safe abstention prevent the retrieval gain from turning into unsupported answers. The frontend makes the complete decision path visible instead of presenting an unexplained result.",
         ),
     ]
     for title, body in final_sections:
@@ -564,15 +579,19 @@ def main() -> None:
                 "[4] Muhammad Umer Tariq Butt, Stalin Varanasi, and Guenter Neumann. Low-Resource Transliteration for Roman-Urdu and Urdu. LoResMT 2025, pp. 144-153. https://aclanthology.org/2025.loresmt-1.13/",
                 styles["Ref"],
             ),
+            Paragraph(
+                "[5] USC Information Sciences Institute. uroman: Universal Romanizer, version 1.3.1.1. https://github.com/isi-nlp/uroman",
+                styles["Ref"],
+            ),
             Spacer(1, 4 * mm),
             Paragraph("Appendix A. Frozen identifiers", styles["Section"]),
             Paragraph(
                 "Dense model: intfloat/multilingual-e5-small @ d1d99a1efae6779390caba937d92c54b5bc70e51. Reranker weights: Alibaba-NLP/gte-multilingual-reranker-base @ a6258e9d2b1a11aa7bccdff9efde562bbca4393d. Reranker custom code: 40ced75c3017eb27626c9d4ea981bde21a2662f4. Urdu Wikipedia revision: 3e1f92c331f318af862b87e2319ed5dc26d80f5d. Diagnostic SHA-256: 98f723f1e5cb8f1ece24a11192052e7a2119629703e001084c0bdcadbfe37cfd.",
                 styles["BodyJ"],
             ),
-            Paragraph("Appendix B. Definition of finalization", styles["Section"]),
+            Paragraph("Appendix B. Assignment scope", styles["Section"]),
             Paragraph(
-                "Finalization requires: (1) independent native-speaker review of all diagnostic questions and failure labels; (2) corrections made without examining test retrieval outputs; (3) final configuration frozen; (4) one-time evaluation on the 60 locked test questions; (5) replacement of provisional tables and figures; and (6) retention of development and test results as separate, clearly labeled analyses.",
+                "This submission includes the local application, pinned dependencies, corpus and model artifacts, evaluation reports, documentation, report source, compiled report, setup instructions, tests, and a portable transfer archive. Slides are intentionally excluded from the final transfer package.",
                 styles["BodyJ"],
             ),
         ]

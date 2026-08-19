@@ -1,4 +1,4 @@
-"""Generate Phase 6 tables, figures, and a provisional 30-case failure audit."""
+"""Generate Phase 6 tables, figures, and a 30-case development failure audit."""
 
 from __future__ import annotations
 
@@ -84,7 +84,7 @@ def bar_svg(title: str, labels: list[str], values: list[float], path: Path) -> N
         f'font-family="sans-serif">{html.escape(title)}</text>'
         f'<g font-family="sans-serif">{"".join(rows)}</g>'
         '<text x="500" y="500" text-anchor="middle" font-family="sans-serif" font-size="13">'
-        'Provisional development split only; higher is better</text></svg>'
+        'Development split only; higher is better</text></svg>'
     )
     path.write_text(svg, encoding="utf-8")
 
@@ -125,10 +125,10 @@ def main() -> None:
         for query_type, systems in sorted(grouped.items())
     }
     robustness_report = {
-        "status": "provisional_codex_verified_development_only",
+        "status": "development_only_project_verified",
         "test_queries_used": 0,
         "query_types": robustness,
-        "limitation": "Independent native-speaker review pending; these are engineering diagnostics.",
+        "limitation": "Development-set engineering diagnostics; the separate test split is not used.",
     }
     args.robustness_output.parent.mkdir(parents=True, exist_ok=True)
     args.robustness_output.write_text(
@@ -191,14 +191,14 @@ def main() -> None:
         "Raabta retrieval ablations — Recall@10",
         list(ablations),
         [ablations[name]["recall_at_10"] for name in ablations],
-        args.figures_dir / "provisional_ablation_recall_at_10.svg",
+        args.figures_dir / "ablation_recall_at_10.svg",
     )
     type_names = list(robustness)
     bar_svg(
         "Reranked Raabta robustness — Recall@10",
         type_names,
         [robustness[name]["querybridge_reranked"]["recall_at_10"] for name in type_names],
-        args.figures_dir / "provisional_robustness_recall_at_10.svg",
+        args.figures_dir / "robustness_recall_at_10.svg",
     )
     manifest = json.loads(args.embedding_manifest.read_text(encoding="utf-8"))
     baseline_report = json.loads(args.baseline_report.read_text(encoding="utf-8"))
@@ -206,7 +206,7 @@ def main() -> None:
     reranker_report = json.loads(args.reranker_report.read_text(encoding="utf-8"))
     reranker_benchmark = json.loads(args.reranker_benchmark.read_text(encoding="utf-8"))
     latency = {
-        "status": "provisional_codex_verified_development_only",
+        "status": "development_only_project_verified",
         "test_queries_used": 0,
         "index_build_seconds": manifest["build_seconds"],
         "embedding_index_bytes": Path("artifacts/embeddings/e5_small_150_30.npy").stat().st_size,

@@ -1,4 +1,4 @@
-"""Evaluate QueryBridge retrieval on provisional development records only."""
+"""Evaluate QueryBridge retrieval on development records only."""
 
 from __future__ import annotations
 
@@ -18,6 +18,7 @@ from raabta.querybridge.bridge import QueryBridge, SupportingLexiconTransliterat
 from raabta.retrieval.dense import DenseRetriever, E5Encoder
 from raabta.retrieval.lexical import BM25Retriever
 from raabta.retrieval.multiquery import MultiQueryRetriever
+from raabta.retrieval.roman_title import RomanizedTitleRetriever
 
 
 def parse_args() -> argparse.Namespace:
@@ -50,6 +51,7 @@ def main() -> None:
         bridge,
         BM25Retriever(passages),
         DenseRetriever(passages, embeddings, encoder),
+        roman_title=RomanizedTitleRetriever(passages),
     )
     with args.diagnostic.open(encoding="utf-8-sig", newline="") as handle:
         queries = [row for row in csv.DictReader(handle) if row["split"] == "development"]
@@ -87,13 +89,13 @@ def main() -> None:
         mean_accepted_variants=round(statistics.fmean(accepted_counts), 3),
     )
     report = {
-        "status": "provisional_codex_verified_development_only",
-        "system": "querybridge_bm25_dense_rrf_no_reranker",
+        "status": "development_only_project_verified",
+        "system": "querybridge_roman_title_bm25_dense_rrf_no_reranker",
         "queries": len(queries),
         "test_queries_used": 0,
         "similarity_threshold": args.threshold,
         "result": result,
-        "limitation": "Not final-paper results; independent native-speaker review pending.",
+        "limitation": "Development-set measurements; the separate test split is not used.",
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")

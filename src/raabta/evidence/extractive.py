@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
 from raabta.data.models import Passage
@@ -64,6 +64,8 @@ class ExtractiveAnswerer:
         candidates: list[SearchResult] | tuple[SearchResult, ...],
         passages_by_id: dict[str, Passage],
         evidence_queries: Sequence[str] | None = None,
+        sentence_validator: Callable[[str], bool] | None = None,
+        prefer_lead: bool = False,
     ) -> GroundedAnswer:
         if not query.strip():
             raise ValueError("query must not be empty")
@@ -91,6 +93,19 @@ class ExtractiveAnswerer:
             zip(sentence_rows, similarities, strict=True),
             key=lambda item: (-float(item[1]), item[0][0].rank, item[0][2]),
         )
+        if sentence_validator is not None:
+            ranked = [item for item in ranked if sentence_validator(item[0][3])]
+            if not ranked:
+                return self._abstain(query, "no_evidence_sentence_matches_answer_type")
+        if prefer_lead:
+            above_threshold = [
+                item for item in ranked if float(item[1]) >= self.similarity_threshold
+            ]
+            if above_threshold:
+                ranked = sorted(
+                    above_threshold,
+                    key=lambda item: (item[0][0].rank, item[0][2], -float(item[1])),
+                )
         best_score = float(ranked[0][1])
         if best_score < self.similarity_threshold:
             return self._abstain(
@@ -136,7 +151,7 @@ class ExtractiveAnswerer:
         )
 
     @staticmethod
-    def _abstain(query: str, reason: str) -> GroundedAnswer:
+    def abstain(query: str, reason: str) -> GroundedAnswer:
         return GroundedAnswer(
             query=query,
             supported=False,
@@ -146,3 +161,5 @@ class ExtractiveAnswerer:
             source_url=None,
             abstention_reason=reason,
         )
+
+    _abstain = abstain

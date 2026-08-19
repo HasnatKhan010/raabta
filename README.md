@@ -91,18 +91,21 @@ The system preserves the original query, generates normalized, Urdu-script, and 
 
 - **QueryBridge** — Controlled, traceable multi-query reformulation with semantic drift gating
 - **Hybrid retrieval** — BM25 + multilingual dense search (E5-small) with per-variant route tracking
+- **Romanized-title retrieval** — Character-level matching between noisy Roman input and romanized Urdu article titles, with one lead passage per article
 - **Reciprocal Rank Fusion** — Merges lexical and semantic signals across all query views
 - **Multilingual reranking** — Optional cross-encoder reranker for deeper relevance scoring
 - **Extractive grounded QA** — Returns exact evidence passages with similarity scores, or abstains
+- **Conservative relevance controls** — Requires reranker relevance, meaningful query overlap, and the requested answer type before showing an answer
+- **Optional live gap-filling** — User-enabled Urdu Wikipedia fallback for questions missing from the bounded local corpus; it is off by default
 - **Research Mode** — Side-by-side comparison of all retrieval systems on any query
-- **Full traceability** — Every result includes query variants, retrieval trace, route contributions, and latency breakdown
+- **Full traceability** — The UI explains the converted query, candidate counts, confidence, decision reasons, source titles, routes, and latency
 - **CPU-first** — Runs entirely on CPU; no GPU required
 
 ---
 
-## Provisional Results
+## Development Results
 
-Measurements on 120 `codex_verified` development questions. The locked 60-question test split is unused. Independent native-speaker review is pending.
+Measurements on 120 `project_verified` development questions. The locked 60-question test split is unused. External language review is outside the assignment scope.
 
 | System | Recall@1 | Recall@5 | Recall@10 | MRR@10 | nDCG@10 |
 |:---|:---:|:---:|:---:|:---:|:---:|
@@ -114,6 +117,10 @@ Measurements on 120 `codex_verified` development questions. The locked 60-questi
 
 QueryBridge improved Recall@10 by +0.075 absolute over baselines. The full reranker pipeline doubled early-rank precision (MRR@10: 0.062 → 0.144).
 
+### Current application accuracy regression
+
+After adding the romanized-title route, the same 120-question development-only retrieval check improved from **0.192 to 0.983 Recall@10**, from **0.117 to 0.875 Recall@5**, and from **0.101 to 0.583 MRR@10** before cross-encoder reranking. These are assignment regression measurements on a title-oriented set, not a guarantee for arbitrary questions. The locked test split remains unused.
+
 ---
 
 ## Corpus & Data
@@ -123,13 +130,15 @@ QueryBridge improved Recall@10 by +0.075 absolute over baselines. The full reran
 - **180** evidence-verified diagnostic questions with frozen 120/60 dev/test split
 - Supporting transliteration lexicon built from Roman-Urdu parallel data
 
+The local corpus is intentionally bounded, so it cannot contain every fact or current product price. Raabta now refuses low-confidence or wrong-shaped evidence instead of displaying a plausible-looking unrelated sentence. Live Urdu Wikipedia can be enabled per query when a broader search is appropriate; enabling it sends the converted query to Wikipedia.
+
 ---
 
 ## Tech Stack
 
 | Layer | Technology |
 |:---|:---|
-| Core library | Python 3.11, sentence-transformers, rank-bm25, scikit-learn |
+| Core library | Python 3.11, sentence-transformers, rank-bm25, scikit-learn, uroman |
 | Dense encoder | [multilingual-e5-small](https://huggingface.co/intfloat/multilingual-e5-small) |
 | Reranker | [gte-multilingual-reranker-base](https://huggingface.co/Alibaba-NLP/gte-multilingual-reranker-base) |
 | Backend | FastAPI + Uvicorn |
@@ -249,7 +258,7 @@ pytest
 |:---|:---|
 | [Implementation plan](docs/implementation_plan.md) | Technical design and architecture |
 | [Milestones](docs/milestones.md) | Phase-by-phase progress tracker |
-| [Provisional results](docs/provisional_results.md) | Development-set evaluation metrics |
+| [Development results](docs/development_results.md) | Development-set evaluation metrics |
 | [Phase 6 analysis](docs/phase6_analysis.md) | Robustness, ablation, latency analysis |
 | [Grounded QA](docs/phase7_grounded_qa.md) | Extractive answering design |
 | [Frontend validation](docs/phase9_frontend.md) | UI implementation and testing |
@@ -262,8 +271,8 @@ pytest
 
 - Gold supervision uses query-to-passage relevance annotations, not a single target column
 - Query generation never receives gold article, passage, evidence, or answer fields
-- The locked 60-question test split remains unused — development results are explicitly provisional
-- Final test metrics will be calculated once, only after independent review and configuration freeze
+- The locked 60-question test split remains unused, so all reported measurements are development results
+- The application displays evidence, source alignment, confidence gates, and abstention reasons instead of presenting unsupported text
 
 ---
 
@@ -286,4 +295,4 @@ pytest
 
 ## License
 
-License to be determined before public release. See `pyproject.toml` for details.
+This submission is prepared as an assignment project. Dataset terms remain documented in `data/README.md`.

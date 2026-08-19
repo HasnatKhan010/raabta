@@ -54,7 +54,7 @@ def main() -> None:
             sorted(Counter(row["verification_status"] for row in rows).items())
         ),
         "evidence_contract": "all passage IDs, article IDs, and exact evidence texts matched",
-        "limitation": "Codex-verified provisional set; independent native review pending",
+        "limitation": "project-verified development set for assignment evaluation",
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")

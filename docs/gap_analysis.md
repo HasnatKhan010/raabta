@@ -30,6 +30,6 @@ RAABTA is not a classifier and not a generic chatbot. The independent variable i
 - The 150–200 question Raabta Diagnostic Set requires manual, native-language verification; generating it automatically would violate the specification.
 - Domain labels are absent from the Wikimedia record schema. Phase 1 therefore uses a documented deterministic heuristic label for subset balancing; these are project metadata, not official Wikipedia categories.
 - Model support for Urdu must be measured on RAABTA data. A multilingual model card is availability evidence, not proof of Urdu effectiveness.
-- A repository license cannot be selected on the student's behalf without confirming publication intentions. It remains explicitly TBD; dataset licenses are documented separately.
+- No separate repository license is selected for this assignment copy; dataset licenses are documented separately.
 - Final paper results, figures, thresholds, and claims must wait for the frozen evaluation run.
 
