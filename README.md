@@ -1,298 +1,285 @@
 <p align="center">
-  <strong>رابطہ</strong>
+  <strong lang="ur" dir="rtl">رابطہ</strong>
 </p>
 
 <h1 align="center">RAABTA</h1>
 
 <p align="center">
-  <em>Script-Aware Multi-Query Reformulation &amp; Evidence Retrieval for Roman-Urdu Questions</em>
+  <strong>Accurate, evidence-first search for Roman-Urdu questions</strong><br>
+  <em>Script-aware retrieval over Urdu knowledge sources</em>
 </p>
 
 <p align="center">
-  <a href="https://github.com/HasnatKhan010/raabta/actions/workflows/ci.yml"><img src="https://github.com/HasnatKhan010/raabta/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <img src="https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white" alt="Python 3.11+">
-  <img src="https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white" alt="FastAPI">
-  <img src="https://img.shields.io/badge/React-Vite-61DAFB?logo=react&logoColor=black" alt="React + Vite">
-  <img src="https://img.shields.io/badge/CPU--only-no%20GPU%20required-brightgreen" alt="CPU-only">
+  <a href="https://github.com/HasnatKhan010/raabta/actions/workflows/ci.yml"><img src="https://github.com/HasnatKhan010/raabta/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+  <img src="https://img.shields.io/badge/Python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white" alt="Python 3.11 and 3.12">
+  <img src="https://img.shields.io/badge/Tests-47%20passing-2E7D32" alt="47 tests passing">
+  <img src="https://img.shields.io/badge/Runtime-CPU--only-brightgreen" alt="CPU-only runtime">
+  <img src="https://img.shields.io/badge/UI-React%20%2B%20Vite-61DAFB?logo=react&logoColor=black" alt="React and Vite">
 </p>
+
+---
+
+## What Raabta does
+
+Roman Urdu is commonly typed with Latin characters, while much useful information is written in Urdu script. Informal spelling makes the problem harder: the same name can be typed in several different ways.
+
+Raabta connects those two forms. It converts and expands the user’s query, searches the local Urdu corpus through complementary retrieval routes, reranks the strongest candidates, and returns an exact sentence from a validated source. If the evidence is weak or does not answer the requested relation, it abstains instead of showing an unrelated result.
+
+> **Research question:** Can script-aware multi-query reformulation improve retrieval for noisy Roman-Urdu questions over Urdu-script knowledge bases compared with direct, single-transliteration, and standard hybrid retrieval?
 
 <p align="center">
-  <img src="https://img.shields.io/badge/code%20style-ruff-261230?logo=ruff&logoColor=D7FF64" alt="Ruff">
-  <img src="https://img.shields.io/badge/tests-pytest-0A9EDC?logo=pytest&logoColor=white" alt="Pytest">
-  <img src="https://img.shields.io/badge/platform-Windows-0078D4?logo=windows&logoColor=white" alt="Windows">
-  <img src="https://img.shields.io/badge/contributions-welcome-brightgreen" alt="Contributions Welcome">
-  <img src="https://img.shields.io/badge/License-TBD-lightgrey" alt="License">
+  <img src="docs/raabta_interface.jpg" alt="Raabta interface showing a grounded Urdu result and its evidence" width="760">
 </p>
+<p align="center"><em>Every answer includes the source, evidence, decision checks, retrieval routes, and timing.</em></p>
 
----
+## Quick start
 
-## Overview
+### Prepared assignment folder
 
-**Raabta** (رابطہ — *connection*) is a CPU-first information-retrieval research system that bridges noisy Roman-Urdu questions to evidence stored in Urdu script. It investigates whether controlled, meaning-preserving multi-query reformulation can improve retrieval effectiveness over direct retrieval, single transliteration, and standard hybrid approaches.
+The prepared project copy already contains the corpus, embeddings, local model files, and built interface.
 
-> **Research question:** *Can script-aware multi-query reformulation improve retrieval effectiveness for noisy Roman-Urdu questions over Urdu-script knowledge bases compared with direct retrieval, single transliteration, and standard hybrid retrieval?*
+Requirements:
 
-The system preserves the original query, generates normalized, Urdu-script, and conservative expansion views through **QueryBridge**, retrieves via BM25 and multilingual dense search, fuses ranks with Reciprocal Rank Fusion, optionally reranks candidates with a multilingual cross-encoder, and returns extractive evidence — or honestly abstains when evidence is insufficient.
+- Windows with PowerShell
+- Python 3.11 or 3.12
+- Internet access during the first setup only, for pinned Python packages
 
-<br>
-
-<p align="center">
-  <img src="docs/raabta_interface.jpg" alt="Raabta Interface — Ask naturally, see the evidence" width="720">
-</p>
-<p align="center"><em>The Raabta interface: type a Roman-Urdu question and receive grounded, traceable Urdu-script evidence</em></p>
-
----
-
-## Architecture
-
-```
-                      ┌─────────────────────────────────────────────────────────────────┐
-                      │                        Roman-Urdu Query                         │
-                      └──────────────────────────────┬──────────────────────────────────┘
-                                                     ▼
-                                          ┌─────────────────────┐
-                                          │    QueryBridge      │
-                                          │  ┌───────────────┐  │
-                                          │  │ Original      │  │
-                                          │  │ Normalized    │  │  Semantic drift
-                                          │  │ Urdu-script   │──│──threshold (0.55)
-                                          │  │ Retrieval     │  │
-                                          │  └───────────────┘  │
-                                          └─────────┬───────────┘
-                                           Accepted │ variants
-                                    ┌───────────────┴───────────────┐
-                                    ▼                               ▼
-                          ┌──────────────────┐           ┌──────────────────┐
-                          │  BM25 Retriever  │           │  Dense Retriever │
-                          │  (per variant)   │           │ (multilingual-e5)│
-                          └────────┬─────────┘           └────────┬─────────┘
-                                   └───────────┬──────────────────┘
-                                               ▼
-                                    ┌─────────────────────┐
-                                    │ Reciprocal Rank     │
-                                    │ Fusion (RRF)        │
-                                    └──────────┬──────────┘
-                                               ▼
-                                    ┌─────────────────────┐
-                                    │ Multilingual        │
-                                    │ Reranker (optional) │
-                                    │ (gte-reranker-base) │
-                                    └──────────┬──────────┘
-                                               ▼
-                                    ┌─────────────────────┐
-                                    │ Extractive QA       │
-                                    │ Evidence / Abstain  │
-                                    └─────────────────────┘
-```
-
----
-
-## Key Features
-
-- **QueryBridge** — Controlled, traceable multi-query reformulation with semantic drift gating
-- **Hybrid retrieval** — BM25 + multilingual dense search (E5-small) with per-variant route tracking
-- **Romanized-title retrieval** — Character-level matching between noisy Roman input and romanized Urdu article titles, with one lead passage per article
-- **Reciprocal Rank Fusion** — Merges lexical and semantic signals across all query views
-- **Multilingual reranking** — Optional cross-encoder reranker for deeper relevance scoring
-- **Extractive grounded QA** — Returns exact evidence passages with similarity scores, or abstains
-- **Conservative relevance controls** — Requires reranker relevance, meaningful query overlap, and the requested answer type before showing an answer
-- **Optional live gap-filling** — User-enabled Urdu Wikipedia fallback for questions missing from the bounded local corpus; it is off by default
-- **Research Mode** — Side-by-side comparison of all retrieval systems on any query
-- **Full traceability** — The UI explains the converted query, candidate counts, confidence, decision reasons, source titles, routes, and latency
-- **CPU-first** — Runs entirely on CPU; no GPU required
-
----
-
-## Development Results
-
-Measurements on 120 `project_verified` development questions. The locked 60-question test split is unused. External language review is outside the assignment scope.
-
-| System | Recall@1 | Recall@5 | Recall@10 | MRR@10 | nDCG@10 |
-|:---|:---:|:---:|:---:|:---:|:---:|
-| Direct Dense | 0.050 | 0.083 | 0.092 | 0.062 | 0.069 |
-| Single Transliteration + BM25 | 0.000 | 0.017 | 0.025 | 0.007 | 0.012 |
-| Standard Hybrid (RRF) | 0.025 | 0.067 | 0.092 | 0.046 | 0.057 |
-| **QueryBridge + RRF** | **0.050** | **0.100** | **0.167** | **0.075** | **0.096** |
-| **QueryBridge + Reranker** | **0.125** | **0.175** | **0.183** | **0.144** | **0.154** |
-
-QueryBridge improved Recall@10 by +0.075 absolute over baselines. The full reranker pipeline doubled early-rank precision (MRR@10: 0.062 → 0.144).
-
-### Current application accuracy regression
-
-After adding the romanized-title route, the same 120-question development-only retrieval check improved from **0.192 to 0.983 Recall@10**, from **0.117 to 0.875 Recall@5**, and from **0.101 to 0.583 MRR@10** before cross-encoder reranking. These are assignment regression measurements on a title-oriented set, not a guarantee for arbitrary questions. The locked test split remains unused.
-
----
-
-## Corpus & Data
-
-- **4,000** Urdu Wikipedia articles (20231101 snapshot)
-- **16,352** traceable passages (150-token windows, 30-token overlap)
-- **180** evidence-verified diagnostic questions with frozen 120/60 dev/test split
-- Supporting transliteration lexicon built from Roman-Urdu parallel data
-
-The local corpus is intentionally bounded, so it cannot contain every fact or current product price. Raabta now refuses low-confidence or wrong-shaped evidence instead of displaying a plausible-looking unrelated sentence. Live Urdu Wikipedia can be enabled per query when a broader search is appropriate; enabling it sends the converted query to Wikipedia.
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|:---|:---|
-| Core library | Python 3.11, sentence-transformers, rank-bm25, scikit-learn, uroman |
-| Dense encoder | [multilingual-e5-small](https://huggingface.co/intfloat/multilingual-e5-small) |
-| Reranker | [gte-multilingual-reranker-base](https://huggingface.co/Alibaba-NLP/gte-multilingual-reranker-base) |
-| Backend | FastAPI + Uvicorn |
-| Frontend | React + TypeScript + Vite |
-| Data sources | [Wikimedia Wikipedia (Urdu)](https://huggingface.co/datasets/wikimedia/wikipedia), [Roman-Urdu-Parl-split](https://huggingface.co/datasets/Mavkif/Roman-Urdu-Parl-split) |
-
----
-
-## Project Structure
-
-```
-raabta/
-├── src/raabta/                # Core Python package
-│   ├── querybridge/           #   QueryBridge multi-query reformulation
-│   ├── retrieval/             #   BM25, dense retrieval, RRF, multi-query
-│   ├── reranking/             #   Multilingual cross-encoder reranker
-│   ├── evidence/              #   Extractive answering & curated answers
-│   ├── preprocessing/         #   Text normalization & tokenization
-│   ├── evaluation/            #   Metrics (Recall, MRR, nDCG)
-│   └── data/                  #   I/O and data models
-├── backend/                   # FastAPI REST API
-├── frontend/                  # React/Vite web interface
-│   └── src/                   #   TypeScript source
-├── scripts/                   # Research & build scripts (24 scripts)
-├── tests/                     # Test suite (11 test modules)
-├── notebooks/                 # Reproducible Jupyter notebooks (7)
-├── configs/                   # YAML configuration files
-├── docs/                      # Research documentation & analysis
-├── paper/                     # LaTeX source & research paper
-├── data/                      # Data directory (large files git-ignored)
-├── artifacts/                 # Models & embeddings (git-ignored)
-├── pyproject.toml             # Package configuration
-├── requirements.txt           # Pinned dependencies
-├── setup.ps1                  # One-command environment setup
-├── start_raabta.ps1           # Launch backend + frontend
-└── stop_raabta.ps1            # Stop all services
-```
-
----
-
-## Quick Start
-
-### Prerequisites
-
-- **Python 3.11** (3.11 ≤ version < 3.13)
-- **Windows** with PowerShell
-
-### Setup
+Run:
 
 ```powershell
-# Clone the repository
-git clone https://github.com/HasnatKhan010/raabta.git
-cd raabta
-
-# Create virtual environment and install dependencies
 powershell -ExecutionPolicy Bypass -File .\setup.ps1
-```
-
-### Download data and models
-
-After setup, activate the virtual environment and run the data pipeline:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-
-# Download Wikipedia Urdu subset and Roman-Urdu parallel data
-python scripts/download_data.py
-
-# Build the passage corpus
-python scripts/build_corpus.py
-
-# Build the transliteration lexicon
-python scripts/build_transliteration_lexicon.py
-
-# Build dense embeddings
-python scripts/build_dense_index.py
-```
-
-### Run the application
-
-```powershell
 powershell -ExecutionPolicy Bypass -File .\start_raabta.ps1
 ```
 
-This launches the API server on `http://127.0.0.1:8000` and the web interface on `http://127.0.0.1:5173`.
-
-### Stop
+Raabta opens at [http://127.0.0.1:5173](http://127.0.0.1:5173). Stop it with:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\stop_raabta.ps1
 ```
 
-### Run tests
+All installed Python packages remain inside `.venv`. Deleting that folder removes the project environment without affecting global Python.
+
+### Fresh GitHub clone
+
+Large data, embeddings, model weights, and `frontend/dist` are intentionally not stored in Git. A fresh clone therefore requires the data pipeline and a frontend build:
 
 ```powershell
+git clone https://github.com/HasnatKhan010/raabta.git
+cd raabta
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
+
 .\.venv\Scripts\Activate.ps1
-pytest
+python scripts\download_data.py
+python scripts\build_corpus.py
+python scripts\build_transliteration_lexicon.py
+python scripts\build_dense_index.py
+
+pnpm --dir frontend install --frozen-lockfile
+pnpm --dir frontend build
+powershell -ExecutionPolicy Bypass -File .\start_raabta.ps1
 ```
 
----
+The frontend build requires Node.js and pnpm. The prepared assignment folder does not require either because it already contains the built interface.
 
-## API Endpoints
+## How the current system works
 
-| Method | Endpoint | Description |
-|:---|:---|:---|
-| `GET` | `/health` | Health check |
-| `POST` | `/api/query` | Submit a query and get grounded evidence |
-| `POST` | `/api/compare` | Compare all retrieval systems on a query |
-| `GET` | `/api/source/{passage_id}` | Retrieve full passage by ID |
-| `GET` | `/api/config` | Current system configuration |
+```text
+Roman-Urdu question
+        |
+        v
+QueryBridge
+  - original query
+  - normalized Roman Urdu
+  - Urdu-script conversion
+  - controlled retrieval form
+        |
+        +----------------------+-----------------------+
+        |                      |                       |
+        v                      v                       v
+Urdu BM25 search      Multilingual dense search   Romanized-title search
+(title boosted)          (E5-small)                (character 2–4 grams)
+        |                      |                       |
+        +----------------------+-----------------------+
+                               |
+                               v
+                 Weighted reciprocal-rank fusion
+                               |
+                               v
+              Multilingual reranker over title + passage
+                               |
+                               v
+       Source alignment + relevance + relation/evidence checks
+                         /                     \
+                        v                       v
+             Exact sourced answer       Clear abstention
+                                                 |
+                                    optional user-enabled
+                                    Urdu Wikipedia fallback
+```
 
----
+The romanized-title route is the main accuracy improvement. It romanizes each Urdu article title with pinned `uroman` rules and uses character-level matching so that missing vowels, abbreviations, and informal entity spellings can still reach the correct article. Only one lead passage per matched article enters this route, preventing duplicate chunks from overwhelming the candidate list.
+
+## Accuracy improvement
+
+The regression check uses the same 120 frozen development questions before and after the title route was added. The separate 60-question test split remains unused.
+
+| Development retrieval pipeline | Recall@1 | Recall@5 | Recall@10 | MRR@10 | nDCG@10 |
+|---|---:|---:|---:|---:|---:|
+| Previous application retrieval | 0.075 | 0.117 | 0.192 | 0.101 | 0.122 |
+| **Current retrieval with romanized-title route** | **0.392** | **0.875** | **0.983** | **0.583** | **0.680** |
+
+Recall@10 improved by **0.792 absolute**, from 0.192 to 0.983. This is a retrieval measurement on a title-oriented development set—not a claim that 98.3% of unrestricted questions receive a correct final answer.
+
+Earlier baseline and ablation measurements are retained in [Development results](docs/development_results.md) and [Phase 6 analysis](docs/phase6_analysis.md).
+
+## How unrelated answers are prevented
+
+Retrieving the right article is necessary but not sufficient. Before displaying an answer, Raabta checks:
+
+1. whether the reranker score clears the relevance threshold;
+2. whether meaningful query content aligns with the selected source;
+3. whether the evidence sentence clears the semantic-similarity threshold;
+4. whether the sentence contains the requested relation, such as birth, death, price, or current capital;
+5. whether a current question is being answered by an outdated historical statement;
+6. whether the text is navigation, references, templates, or a generic list description; and
+7. whether the extracted sentence comes from the exact source that passed validation.
+
+A failed check produces a visible abstention reason. The system does not generate a replacement fact.
+
+## What the interface explains
+
+For each query, the frontend shows:
+
+- the current pipeline stage and final decision;
+- original, normalized, and Urdu-script query forms;
+- accepted and rejected QueryBridge variants;
+- candidates contributed by BM25, dense, and romanized-title routes;
+- reranker relevance, content overlap, title match, and evidence thresholds;
+- exact evidence, article title, passage identifier, and source link;
+- candidate passages that were checked but rejected;
+- local, reranking, validation, and optional live-search latency; and
+- why an answer was accepted or why the system abstained.
+
+**Research Mode** can also compare Direct Dense, Single Transliteration + BM25, Standard Hybrid, and the full Raabta pipeline for the same query.
+
+## Local and live search
+
+Normal searches stay on the PC and use the bounded local corpus. If the local result fails validation, the user can explicitly enable **Live Urdu Wikipedia fallback** and retry.
+
+The live option:
+
+- is off by default;
+- sends the converted query to Urdu Wikipedia only when enabled;
+- passes returned passages through the same reranking and validation checks; and
+- is intended for encyclopedic coverage, not shopping prices or breaking news.
+
+## Data and models
+
+| Component | Assignment configuration |
+|---|---|
+| Urdu corpus | 4,000 Wikipedia articles from the frozen `20231101.ur` snapshot |
+| Passage collection | 16,352 passages; 150-token windows with 30-token overlap |
+| Diagnostic set | 180 evidence-linked questions: 120 development and 60 locked test |
+| Dense encoder | `intfloat/multilingual-e5-small`, 384 dimensions |
+| Reranker | `Alibaba-NLP/gte-multilingual-reranker-base`, top 20 candidates |
+| Title romanizer | `uroman==1.3.1.1` |
+| Retrieval | Unicode BM25 + exact dense search + romanized-title matching + weighted RRF |
+| Runtime | CPU-only |
+
+Dataset and model revisions are pinned in [configs/default.yaml](configs/default.yaml). Artifact checksums are recorded under `artifacts/metadata` in a complete project copy.
+
+## Project layout
+
+```text
+raabta/
+├── backend/                 FastAPI application and response models
+├── frontend/                React/TypeScript interface
+├── src/raabta/
+│   ├── querybridge/         Query normalization and script conversion
+│   ├── retrieval/           BM25, dense, title matching, fusion, live fallback
+│   ├── reranking/           Multilingual cross-encoder
+│   ├── evidence/            Extraction, relevance checks, and abstention
+│   ├── evaluation/          Recall, MRR, and nDCG metrics
+│   └── data/                Data contracts and loaders
+├── configs/                 Frozen project configuration
+├── data/                    Local corpora and diagnostic data
+├── artifacts/               Embeddings, indexes, metadata, and local models
+├── reports/                 Measured tables, figures, and failure analysis
+├── notebooks/               Seven executed analysis notebooks
+├── paper/                   Assignment report source and compiled PDF
+├── scripts/                 Data, evaluation, audit, and report builders
+├── tests/                   Automated test suite
+├── setup.ps1                Create the isolated Python environment
+├── start_raabta.ps1         Start API and built frontend
+└── stop_raabta.ps1          Stop both local services
+```
+
+## API
+
+The backend is available at `http://127.0.0.1:8000`. Interactive API documentation is available at `/docs`.
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/health` | Check application and artifact availability |
+| `POST` | `/api/query` | Run retrieval, reranking, evidence validation, and optional live fallback |
+| `POST` | `/api/compare` | Compare the four retrieval systems |
+| `GET` | `/api/source/{passage_id}` | Return the exact stored source passage |
+| `GET` | `/api/config` | Show active non-probabilistic project settings |
+
+Example request:
+
+```json
+{
+  "query": "pakistan ka capital kya hai",
+  "research_mode": false,
+  "live_search": false
+}
+```
+
+## Development checks
+
+```powershell
+$env:PYTHONPATH = "src"
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m ruff check src backend scripts tests
+pnpm --dir frontend build
+.\.venv\Scripts\python.exe scripts\audit_portability.py
+```
+
+Current verification:
+
+- 47 automated tests pass;
+- Python lint passes;
+- the React production build passes;
+- the portability audit passes;
+- the diagnostic split remains 120 development / 60 locked test; and
+- all inspected evaluation reports confirm zero locked-test queries used.
 
 ## Documentation
 
-| Document | Description |
-|:---|:---|
-| [Implementation plan](docs/implementation_plan.md) | Technical design and architecture |
-| [Milestones](docs/milestones.md) | Phase-by-phase progress tracker |
-| [Development results](docs/development_results.md) | Development-set evaluation metrics |
-| [Phase 6 analysis](docs/phase6_analysis.md) | Robustness, ablation, latency analysis |
-| [Grounded QA](docs/phase7_grounded_qa.md) | Extractive answering design |
-| [Frontend validation](docs/phase9_frontend.md) | UI implementation and testing |
-| [Portability validation](docs/phase10_validation.md) | Clean-room reproducibility checks |
+| Document | Contents |
+|---|---|
+| [Assignment report](paper/main.pdf) | Complete six-page project report |
+| [Implementation plan](docs/implementation_plan.md) | Architecture and implementation decisions |
+| [Accuracy hardening](docs/accuracy_hardening.md) | Title retrieval and answer-validation improvements |
+| [Development results](docs/development_results.md) | Current and earlier retrieval measurements |
+| [Phase 6 analysis](docs/phase6_analysis.md) | Robustness, ablations, latency, and failure findings |
+| [Grounded QA](docs/phase7_grounded_qa.md) | Extractive-answer design |
+| [Frontend validation](docs/phase9_frontend.md) | Interface behavior |
+| [Portability validation](docs/phase10_validation.md) | Reproducibility checks |
 
+## Assignment scope and limitations
 
----
-
-## Research Integrity
-
-- Gold supervision uses query-to-passage relevance annotations, not a single target column
-- Query generation never receives gold article, passage, evidence, or answer fields
-- The locked 60-question test split remains unused, so all reported measurements are development results
-- The application displays evidence, source alignment, confidence gates, and abstention reasons instead of presenting unsupported text
-
----
-
-## External Resources
-
-- [Wikimedia Wikipedia, Urdu 20231101 snapshot](https://huggingface.co/datasets/wikimedia/wikipedia/tree/3e1f92c331f318af862b87e2319ed5dc26d80f5d/20231101.ur) — CC BY-SA 3.0 / GFDL
-- [Roman-Urdu-Parl-split](https://huggingface.co/datasets/Mavkif/Roman-Urdu-Parl-split) — Apache 2.0
-- [multilingual-e5-small](https://huggingface.co/intfloat/multilingual-e5-small) — Dense encoder
-- [gte-multilingual-reranker-base](https://huggingface.co/Alibaba-NLP/gte-multilingual-reranker-base) — Cross-encoder reranker
-- [Butt, Varanasi & Neumann (2025)](https://aclanthology.org/2025.lowresnlp-1.9/) — Roman-Urdu IR dataset & baseline
-- [Butt, Varanasi & Neumann (2025)](https://aclanthology.org/2025.loresmt-1.13/) — Roman-Urdu/Urdu transliteration
-
----
+- The reported scores are development-set measurements; the locked test split is not used.
+- Recall@10 measures whether relevant evidence appears in the first ten results, not final-answer correctness.
+- The diagnostic questions are title-oriented and do not represent every Roman-Urdu information need.
+- The 4,000-article local corpus cannot cover every topic.
+- Live Wikipedia fallback is not a dependable source for current prices or breaking news.
+- Wikipedia attribution and dataset license requirements must be preserved when data is shared.
 
 ## Author
 
 **Hasnat Khan**
 
----
+This repository is the assignment project copy. Source-dataset terms and attribution notes are documented in [data/README.md](data/README.md).
 
-## License
-
-This submission is prepared as an assignment project. Dataset terms remain documented in `data/README.md`.
