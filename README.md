@@ -259,7 +259,7 @@ Current verification:
 
 | Document | Contents |
 |---|---|
-| [Assignment report](paper/main.pdf) | Complete six-page project report |
+| [IEEE research paper](paper/main.pdf) | Complete six-page Part 11 paper with LaTeX source |
 | [Implementation plan](docs/implementation_plan.md) | Architecture and implementation decisions |
 | [Accuracy hardening](docs/accuracy_hardening.md) | Title retrieval and answer-validation improvements |
 | [Development results](docs/development_results.md) | Current and earlier retrieval measurements |
@@ -282,4 +282,3 @@ Current verification:
 **Hasnat Khan**
 
 This repository is the assignment project copy. Source-dataset terms and attribution notes are documented in [data/README.md](data/README.md).
-
