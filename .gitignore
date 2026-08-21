@@ -18,6 +18,8 @@ work/cleanroom_venv/
 .env
 .env.*
 !.env.example
+.streamlit/secrets.toml
+!.streamlit/secrets.toml.example
 
 # Editor and operating-system files
 .idea/

@@ -12,7 +12,7 @@
 <p align="center">
   <a href="https://github.com/HasnatKhan010/raabta/actions/workflows/ci.yml"><img src="https://github.com/HasnatKhan010/raabta/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
   <img src="https://img.shields.io/badge/Python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white" alt="Python 3.11 and 3.12">
-  <img src="https://img.shields.io/badge/Tests-47%20passing-2E7D32" alt="47 tests passing">
+  <img src="https://img.shields.io/badge/Tests-51%20passing-2E7D32" alt="51 tests passing">
   <img src="https://img.shields.io/badge/Runtime-CPU--only-brightgreen" alt="CPU-only runtime">
   <img src="https://img.shields.io/badge/UI-React%20%2B%20Vite-61DAFB?logo=react&logoColor=black" alt="React and Vite">
 </p>
@@ -58,6 +58,16 @@ powershell -ExecutionPolicy Bypass -File .\stop_raabta.ps1
 ```
 
 All installed Python packages remain inside `.venv`. Deleting that folder removes the project environment without affecting global Python.
+
+### Quick Streamlit demo
+
+The original FastAPI + React application remains the full deployment. For a faster one-command demonstration using the same retrieval and evidence engine, run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\start_streamlit.ps1
+```
+
+The local Streamlit URL is normally [http://localhost:8501](http://localhost:8501). For Streamlit Community Cloud, use `streamlit_app.py` as the entrypoint and configure `RAABTA_API_URL` to a deployed instance of the existing FastAPI backend. See [Streamlit deployment](docs/streamlit_deployment.md) for the artifact and secrets requirements.
 
 ### Fresh GitHub clone
 
@@ -194,6 +204,7 @@ Dataset and model revisions are pinned in [configs/default.yaml](configs/default
 raabta/
 ├── backend/                 FastAPI application and response models
 ├── frontend/                React/TypeScript interface
+├── streamlit_app.py         Quick Streamlit interface using the same engine/API
 ├── src/raabta/
 │   ├── querybridge/         Query normalization and script conversion
 │   ├── retrieval/           BM25, dense, title matching, fusion, live fallback
@@ -268,6 +279,7 @@ Current verification:
 | [Phase 6 analysis](docs/phase6_analysis.md) | Robustness, ablations, latency, and failure findings |
 | [Grounded QA](docs/phase7_grounded_qa.md) | Extractive-answer design |
 | [Frontend validation](docs/phase9_frontend.md) | Interface behavior |
+| [Streamlit deployment](docs/streamlit_deployment.md) | Quick local demo and Community Cloud setup |
 | [Portability validation](docs/phase10_validation.md) | Reproducibility checks |
 
 ## Assignment scope and limitations

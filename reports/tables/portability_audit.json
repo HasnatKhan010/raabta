@@ -64,11 +64,25 @@
       "passed": true
     },
     "python_dependencies_pinned": {
-      "detail": "21 exact pins",
+      "detail": "22 exact pins",
       "passed": true
     },
     "python_supported": {
       "detail": "3.12.13",
+      "passed": true
+    },
+    "streamlit_deployment_present": {
+      "detail": [
+        "streamlit_app.py",
+        "start_streamlit.ps1",
+        ".streamlit\\config.toml",
+        ".streamlit\\secrets.toml.example",
+        "docs\\streamlit_deployment.md"
+      ],
+      "passed": true
+    },
+    "streamlit_secrets_ignored": {
+      "detail": "real Streamlit secrets are ignored; example configuration is tracked",
       "passed": true
     }
   },

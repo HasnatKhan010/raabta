@@ -55,6 +55,24 @@ def main() -> None:
         ),
         "venv, node_modules, and dist are removable",
     )
+    streamlit_files = [
+        ROOT / "streamlit_app.py",
+        ROOT / "start_streamlit.ps1",
+        ROOT / ".streamlit/config.toml",
+        ROOT / ".streamlit/secrets.toml.example",
+        ROOT / "docs/streamlit_deployment.md",
+    ]
+    record(
+        "streamlit_deployment_present",
+        all(path.is_file() for path in streamlit_files),
+        [str(path.relative_to(ROOT)) for path in streamlit_files],
+    )
+    gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
+    record(
+        "streamlit_secrets_ignored",
+        ".streamlit/secrets.toml" in gitignore,
+        "real Streamlit secrets are ignored; example configuration is tracked",
+    )
 
     phase1 = json.loads(
         (ROOT / "artifacts/metadata/phase1_manifest.json").read_text(encoding="utf-8")

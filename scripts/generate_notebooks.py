@@ -670,7 +670,7 @@ NOTEBOOKS_CONTENT = {
             """
             # Parts 9–10 — Error Analysis, Evidence Safety, and Deployment Linkage
 
-            This notebook inspects concrete failures rather than treating an aggregate score as sufficient. It also verifies that the evaluated pipeline is connected to the local FastAPI/React deployment required by Part 10.
+            This notebook inspects concrete failures rather than treating an aggregate score as sufficient. It also verifies that the evaluated pipeline is connected to the local FastAPI/React deployment and the additional Streamlit interface required by Part 10.
 
             **Scope:** the 30-case audit describes the original pipeline. Its categories are rule-assigned development diagnostics and require independent human review.
             """
@@ -739,7 +739,7 @@ NOTEBOOKS_CONTENT = {
         markdown("## Part 10 — Deployment linkage and local completeness"),
         code(
             r'''
-            required_paths = ["backend/app/main.py", "backend/app/models.py", "backend/app/service.py", "frontend/package.json", "frontend/src/App.tsx", "frontend/dist/index.html"]
+            required_paths = ["backend/app/main.py", "backend/app/models.py", "backend/app/service.py", "frontend/package.json", "frontend/src/App.tsx", "frontend/dist/index.html", "streamlit_app.py", "start_streamlit.ps1"]
             deployment_rows = [{"path": path, "present": (ROOT / path).is_file()} for path in required_paths]
             print_table(deployment_rows, ["path", "present"])
             audit = load_json("reports/tables/portability_audit.json")
@@ -751,7 +751,7 @@ NOTEBOOKS_CONTENT = {
         ),
         markdown(
             """
-            The deployable application is not implemented inside the notebook. Part 10 is satisfied by the repository's FastAPI backend and React/Vite frontend, which consume the same retrieval/evidence pipeline measured here. The interface exposes query transformations, route contributions, candidate counts, confidence, evidence gates, source URL, abstention reason, and component latency.
+            The deployable application is not implemented inside the notebook. Part 10 is satisfied by the repository's FastAPI backend and React/Vite frontend, which consume the same retrieval/evidence pipeline measured here. A Streamlit entrypoint is also included for quick local demonstration or as a lightweight hosted UI connected to the FastAPI service. Both interfaces expose query transformations, route contributions, candidate counts, confidence, evidence gates, source URL, abstention reason, and component latency.
 
             ## Final analysis conclusion
 

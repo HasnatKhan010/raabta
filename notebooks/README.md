@@ -10,9 +10,9 @@ The seven executed notebooks form one detailed, reproducible assignment workflow
 | `04_querybridge.ipynb` | Part 8: baseline limitation, literature-based improvement, QueryBridge, romanized-title matching, before/after results, and a worked trace |
 | `05_ablation.ipynb` | Parts 8–9: component ablations, title-route control, visual comparison, interpretation, and limitations |
 | `06_robustness.ipynb` | Part 9: all-model comparison, robustness, latency/resources, best-model conclusion, and trade-offs |
-| `07_error_analysis.ipynb` | Parts 9–10: traceable failure cases, evidence safety, deployment-file verification, and final limitations |
+| `07_error_analysis.ipynb` | Parts 9–10: traceable failure cases, evidence safety, FastAPI/React/Streamlit deployment verification, and final limitations |
 
-Part 10's runnable application is implemented under `backend/` and `frontend/`; it is validated and linked from Notebook 07 rather than duplicated inside a notebook. Part 11 is the LaTeX/PDF submission under `paper/`.
+Part 10's full runnable application is implemented under `backend/` and `frontend/`, with `streamlit_app.py` providing an additional quick-deployment interface over the same engine or API. All three paths are validated and linked from Notebook 07 rather than duplicated inside a notebook. Part 11 is the LaTeX/PDF submission under `paper/`.
 
 From the project root, regenerate and execute everything with:
 

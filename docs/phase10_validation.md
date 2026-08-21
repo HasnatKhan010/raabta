@@ -6,6 +6,7 @@ Validation date: 2026-08-16.
 
 - All Python unit and API integration tests pass.
 - The real local frontend-to-API query path was validated in Phase 9.
+- The additional Streamlit interface starts successfully and supports either the same local engine artifacts or a configured FastAPI backend; it does not replace the React application.
 - Python dependency, build-tool, and frontend dependency versions are pinned.
 - A fresh Python 3.12 virtual environment successfully built and installed the local `raabta-ir` wheel without relying on the existing `.venv` package installation.
 - The installed clean-room package imported as `raabta` and all source/backend/script files compiled.
