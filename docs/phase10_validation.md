@@ -10,7 +10,7 @@ Validation date: 2026-08-16.
 - A fresh Python 3.12 virtual environment successfully built and installed the local `raabta-ir` wheel without relying on the existing `.venv` package installation.
 - The installed clean-room package imported as `raabta` and all source/backend/script files compiled.
 - `pnpm install --frozen-lockfile` and the TypeScript/Vite production build pass.
-- Seven standard notebooks execute top-to-bottom with fixed seed `20250816`, visible outputs, and no error outputs.
+- Seven detailed assignment notebooks execute top-to-bottom with fixed seed `20250816`, visible outputs, no error outputs, explicit Parts 1–10 coverage, and 11 linked visualizations.
 - The main Phase 6 report/figure command regenerates successfully from measured artifacts.
 - The default passage and E5 embedding checksums match their manifests.
 - No source, configuration, backend, or frontend file contains a machine-specific Windows workspace path.

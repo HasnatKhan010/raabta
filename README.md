@@ -252,6 +252,7 @@ Current verification:
 - Python lint passes;
 - the React production build passes;
 - the portability audit passes;
+- all seven detailed notebooks execute with visible outputs and 11 linked visualizations;
 - the diagnostic split remains 120 development / 60 locked test; and
 - all inspected evaluation reports confirm zero locked-test queries used.
 
@@ -259,6 +260,7 @@ Current verification:
 
 | Document | Contents |
 |---|---|
+| [Executed assignment notebooks](notebooks/README.md) | Detailed Parts 1–10 analysis, results, visualizations, and deployment linkage |
 | [IEEE research paper](paper/main.pdf) | Complete six-page Part 11 paper with LaTeX source |
 | [Implementation plan](docs/implementation_plan.md) | Architecture and implementation decisions |
 | [Accuracy hardening](docs/accuracy_hardening.md) | Title retrieval and answer-validation improvements |

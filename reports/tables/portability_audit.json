@@ -39,6 +39,14 @@
       "detail": "all source/config paths are relative",
       "passed": true
     },
+    "notebook_rubric_coverage": {
+      "detail": {
+        "assignment_parts_documented": "1-10",
+        "notebooks": 7,
+        "visualization_references": 11
+      },
+      "passed": true
+    },
     "notebooks_executed": {
       "detail": [
         "01_dataset_setup.ipynb",

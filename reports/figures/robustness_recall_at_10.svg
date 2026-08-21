@@ -1,1 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="520" viewBox="0 0 1000 520"><rect width="100%" height="100%" fill="white"/><text x="500.0" y="35" text-anchor="middle" font-size="22" font-family="sans-serif">Reranked Raabta robustness — Recall@10</text><g font-family="sans-serif"><text x="218" y="91.0" text-anchor="end" font-size="14">abbreviated_roman_urdu</text><rect x="230" y="70.0" width="0.0" height="28.0" fill="#3765a3" rx="3"/><text x="238.0" y="91.0" font-size="13">0.000</text><text x="218" y="137.2" text-anchor="end" font-size="14">clean_roman_urdu</text><rect x="230" y="116.2" width="650.0" height="28.0" fill="#3765a3" rx="3"/><text x="888.0" y="137.2" font-size="13">0.500</text><text x="218" y="183.5" text-anchor="end" font-size="14">highly_noisy_roman_urdu</text><rect x="230" y="162.5" width="346.7" height="28.0" fill="#3765a3" rx="3"/><text x="584.7" y="183.5" font-size="13">0.267</text><text x="218" y="229.8" text-anchor="end" font-size="14">informal_spelling</text><rect x="230" y="208.8" width="81.2" height="28.0" fill="#3765a3" rx="3"/><text x="319.2" y="229.8" font-size="13">0.062</text><text x="218" y="276.0" text-anchor="end" font-size="14">named_entity</text><rect x="230" y="255.0" width="92.9" height="28.0" fill="#3765a3" rx="3"/><text x="330.9" y="276.0" font-size="13">0.071</text><text x="218" y="322.2" text-anchor="end" font-size="14">short_query</text><rect x="230" y="301.2" width="346.7" height="28.0" fill="#3765a3" rx="3"/><text x="584.7" y="322.2" font-size="13">0.267</text><text x="218" y="368.5" text-anchor="end" font-size="14">slightly_ambiguous</text><rect x="230" y="347.5" width="86.7" height="28.0" fill="#3765a3" rx="3"/><text x="324.7" y="368.5" font-size="13">0.067</text><text x="218" y="414.8" text-anchor="end" font-size="14">urdu_english_code_switching</text><rect x="230" y="393.8" width="278.6" height="28.0" fill="#3765a3" rx="3"/><text x="516.6" y="414.8" font-size="13">0.214</text></g><text x="500" y="500" text-anchor="middle" font-family="sans-serif" font-size="13">Development split only; higher is better</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="348" viewBox="0 0 820 348">
+<rect width="100%" height="100%" fill="white"/>
+<text x="410.0" y="27" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700">Original reranked pipeline: Recall@10 by query type</text>
+<text x="235" y="69" text-anchor="end" font-family="Arial" font-size="13">abbreviated_roman_urdu</text>
+<rect x="245" y="52" width="0.00" height="20" rx="3" fill="#1c5b58"/>
+<text x="252.00" y="68" font-family="Arial" font-size="12">0</text>
+<text x="235" y="103" text-anchor="end" font-family="Arial" font-size="13">clean_roman_urdu</text>
+<rect x="245" y="86" width="450.00" height="20" rx="3" fill="#1c5b58"/>
+<text x="702.00" y="102" font-family="Arial" font-size="12">0.5</text>
+<text x="235" y="137" text-anchor="end" font-family="Arial" font-size="13">highly_noisy_roman_urdu</text>
+<rect x="245" y="120" width="240.03" height="20" rx="3" fill="#1c5b58"/>
+<text x="492.03" y="136" font-family="Arial" font-size="12">0.2667</text>
+<text x="235" y="171" text-anchor="end" font-family="Arial" font-size="13">informal_spelling</text>
+<rect x="245" y="154" width="56.25" height="20" rx="3" fill="#1c5b58"/>
+<text x="308.25" y="170" font-family="Arial" font-size="12">0.0625</text>
+<text x="235" y="205" text-anchor="end" font-family="Arial" font-size="13">named_entity</text>
+<rect x="245" y="188" width="64.26" height="20" rx="3" fill="#1c5b58"/>
+<text x="316.26" y="204" font-family="Arial" font-size="12">0.0714</text>
+<text x="235" y="239" text-anchor="end" font-family="Arial" font-size="13">short_query</text>
+<rect x="245" y="222" width="240.03" height="20" rx="3" fill="#1c5b58"/>
+<text x="492.03" y="238" font-family="Arial" font-size="12">0.2667</text>
+<text x="235" y="273" text-anchor="end" font-family="Arial" font-size="13">slightly_ambiguous</text>
+<rect x="245" y="256" width="60.03" height="20" rx="3" fill="#1c5b58"/>
+<text x="312.03" y="272" font-family="Arial" font-size="12">0.0667</text>
+<text x="235" y="307" text-anchor="end" font-family="Arial" font-size="13">urdu_english_code_switching</text>
+<rect x="245" y="290" width="192.87" height="20" rx="3" fill="#1c5b58"/>
+<text x="444.87" y="306" font-family="Arial" font-size="12">0.2143</text>
+</svg>

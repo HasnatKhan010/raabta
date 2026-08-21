@@ -1,1 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="520" viewBox="0 0 1000 520"><rect width="100%" height="100%" fill="white"/><text x="500.0" y="35" text-anchor="middle" font-size="22" font-family="sans-serif">Raabta retrieval ablations — Recall@10</text><g font-family="sans-serif"><text x="218" y="91.0" text-anchor="end" font-size="14">full_no_reranker</text><rect x="230" y="70.0" width="650.0" height="28.0" fill="#3765a3" rx="3"/><text x="888.0" y="91.0" font-size="13">0.167</text><text x="218" y="143.9" text-anchor="end" font-size="14">no_bm25</text><rect x="230" y="122.9" width="552.5" height="28.0" fill="#3765a3" rx="3"/><text x="790.5" y="143.9" font-size="13">0.142</text><text x="218" y="196.7" text-anchor="end" font-size="14">no_dense</text><rect x="230" y="175.7" width="325.0" height="28.0" fill="#3765a3" rx="3"/><text x="563.0" y="196.7" font-size="13">0.083</text><text x="218" y="249.6" text-anchor="end" font-size="14">no_expansion</text><rect x="230" y="228.6" width="617.5" height="28.0" fill="#3765a3" rx="3"/><text x="855.5" y="249.6" font-size="13">0.158</text><text x="218" y="302.4" text-anchor="end" font-size="14">no_fusion</text><rect x="230" y="281.4" width="227.5" height="28.0" fill="#3765a3" rx="3"/><text x="465.5" y="302.4" font-size="13">0.058</text><text x="218" y="355.3" text-anchor="end" font-size="14">no_normalization</text><rect x="230" y="334.3" width="585.0" height="28.0" fill="#3765a3" rx="3"/><text x="823.0" y="355.3" font-size="13">0.150</text><text x="218" y="408.1" text-anchor="end" font-size="14">no_transliteration</text><rect x="230" y="387.1" width="260.0" height="28.0" fill="#3765a3" rx="3"/><text x="498.0" y="408.1" font-size="13">0.067</text></g><text x="500" y="500" text-anchor="middle" font-family="sans-serif" font-size="13">Development split only; higher is better</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="314" viewBox="0 0 820 314">
+<rect width="100%" height="100%" fill="white"/>
+<text x="410.0" y="27" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700">Retrieval ablation Recall@10</text>
+<text x="235" y="69" text-anchor="end" font-family="Arial" font-size="13">full_no_reranker</text>
+<rect x="245" y="52" width="412.50" height="20" rx="3" fill="#1c5b58"/>
+<text x="664.50" y="68" font-family="Arial" font-size="12">0.1667</text>
+<text x="235" y="103" text-anchor="end" font-family="Arial" font-size="13">no_bm25</text>
+<rect x="245" y="86" width="350.63" height="20" rx="3" fill="#1c5b58"/>
+<text x="602.63" y="102" font-family="Arial" font-size="12">0.1417</text>
+<text x="235" y="137" text-anchor="end" font-family="Arial" font-size="13">no_dense</text>
+<rect x="245" y="120" width="206.25" height="20" rx="3" fill="#1c5b58"/>
+<text x="458.25" y="136" font-family="Arial" font-size="12">0.08333</text>
+<text x="235" y="171" text-anchor="end" font-family="Arial" font-size="13">no_expansion</text>
+<rect x="245" y="154" width="391.87" height="20" rx="3" fill="#1c5b58"/>
+<text x="643.87" y="170" font-family="Arial" font-size="12">0.1583</text>
+<text x="235" y="205" text-anchor="end" font-family="Arial" font-size="13">no_fusion</text>
+<rect x="245" y="188" width="144.37" height="20" rx="3" fill="#1c5b58"/>
+<text x="396.37" y="204" font-family="Arial" font-size="12">0.05833</text>
+<text x="235" y="239" text-anchor="end" font-family="Arial" font-size="13">no_normalization</text>
+<rect x="245" y="222" width="371.25" height="20" rx="3" fill="#1c5b58"/>
+<text x="623.25" y="238" font-family="Arial" font-size="12">0.15</text>
+<text x="235" y="273" text-anchor="end" font-family="Arial" font-size="13">no_transliteration</text>
+<rect x="245" y="256" width="165.00" height="20" rx="3" fill="#1c5b58"/>
+<text x="417.00" y="272" font-family="Arial" font-size="12">0.06667</text>
+</svg>

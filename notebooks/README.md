@@ -1,5 +1,25 @@
-# Notebooks
+# Assignment notebooks
 
-Seven phase-specific notebooks execute top-to-bottom from frozen local artifacts. They use fixed seeds, contain visible outputs, avoid hidden state, and keep the locked test split untouched. Run `scripts/execute_notebooks.py` from the project root to re-execute them without requiring Jupyter; they also remain valid standard `.ipynb` files for JupyterLab.
+The seven executed notebooks form one detailed, reproducible assignment workflow. They contain written justification before preprocessing or modeling, visible tables and outputs, linked SVG visualizations, fixed seed `20250816`, and explicit development/test safeguards.
 
-The notebooks summarize existing measured artifacts instead of repeating multi-hour CPU model runs. The scripts that generate those measurements remain the source of truth, and important summaries are stored under `reports/`.
+| Notebook | Assignment coverage |
+|---|---|
+| `01_dataset_setup.ipynb` | Parts 1–3: problem formulation, five-paper literature review, research gap, public datasets, features, relevance target, provenance, and limitations |
+| `02_eda_and_preprocessing.ipynb` | Parts 4–5: justification for every preprocessing step, corpus/query EDA, chunking comparison, visualizations, and modeling difficulties |
+| `03_baseline_retrieval.ipynb` | Parts 6–7: three distinct baselines, split/validation/tuning strategy, metrics, reproducibility, hardware/software, results, and latency |
+| `04_querybridge.ipynb` | Part 8: baseline limitation, literature-based improvement, QueryBridge, romanized-title matching, before/after results, and a worked trace |
+| `05_ablation.ipynb` | Parts 8–9: component ablations, title-route control, visual comparison, interpretation, and limitations |
+| `06_robustness.ipynb` | Part 9: all-model comparison, robustness, latency/resources, best-model conclusion, and trade-offs |
+| `07_error_analysis.ipynb` | Parts 9–10: traceable failure cases, evidence safety, deployment-file verification, and final limitations |
+
+Part 10's runnable application is implemented under `backend/` and `frontend/`; it is validated and linked from Notebook 07 rather than duplicated inside a notebook. Part 11 is the LaTeX/PDF submission under `paper/`.
+
+From the project root, regenerate and execute everything with:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\generate_notebooks.py
+.\.venv\Scripts\python.exe scripts\execute_notebooks.py
+.\.venv\Scripts\python.exe scripts\audit_portability.py
+```
+
+The notebooks read frozen local data and measured reports instead of repeating multi-hour embedding and reranker jobs. Measurement-generation scripts remain under `scripts/`, and the locked 60-question test partition remains unused.

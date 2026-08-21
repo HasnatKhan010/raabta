@@ -122,6 +122,40 @@ def main() -> None:
         notebook_issues or [path.name for path in notebook_paths],
     )
 
+    notebook_detail_issues = []
+    combined_markdown = []
+    figure_references = 0
+    for path in notebook_paths:
+        notebook = json.loads(path.read_text(encoding="utf-8"))
+        markdown_cells = [cell for cell in notebook["cells"] if cell["cell_type"] == "markdown"]
+        markdown_text = "\n".join("".join(cell["source"]) for cell in markdown_cells)
+        combined_markdown.append(markdown_text)
+        figure_references += markdown_text.count("../reports/figures/")
+        if len(notebook["cells"]) < 10:
+            notebook_detail_issues.append(f"{path.name}: fewer than 10 cells")
+        if len(markdown_cells) < 6:
+            notebook_detail_issues.append(f"{path.name}: fewer than 6 markdown cells")
+        if len(markdown_text.split()) < 250:
+            notebook_detail_issues.append(f"{path.name}: insufficient written analysis")
+    all_markdown = "\n".join(combined_markdown).casefold()
+    missing_parts = [part for part in range(1, 11) if f"part {part}" not in all_markdown]
+    if missing_parts:
+        notebook_detail_issues.append(f"missing assignment parts: {missing_parts}")
+    if figure_references < 8:
+        notebook_detail_issues.append(
+            f"only {figure_references} notebook visualization references"
+        )
+    record(
+        "notebook_rubric_coverage",
+        len(notebook_paths) == 7 and not notebook_detail_issues,
+        notebook_detail_issues
+        or {
+            "notebooks": len(notebook_paths),
+            "assignment_parts_documented": "1-10",
+            "visualization_references": figure_references,
+        },
+    )
+
     absolute_pattern = re.compile(r"[A-Za-z]:[\\/](?:Users|Documents)[\\/]", re.IGNORECASE)
     scan_extensions = {".py", ".yaml", ".yml", ".toml", ".tsx", ".ts", ".css", ".md", ".ps1"}
     hardcoded = []

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="348" viewBox="0 0 820 348">
+<rect width="100%" height="100%" fill="white"/>
+<text x="410.0" y="27" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700">Diagnostic questions by query type</text>
+<text x="235" y="69" text-anchor="end" font-family="Arial" font-size="13">abbreviated_roman_urdu</text>
+<rect x="245" y="52" width="495.00" height="20" rx="3" fill="#1c5b58"/>
+<text x="747.00" y="68" font-family="Arial" font-size="12">23</text>
+<text x="235" y="103" text-anchor="end" font-family="Arial" font-size="13">clean_roman_urdu</text>
+<rect x="245" y="86" width="495.00" height="20" rx="3" fill="#1c5b58"/>
+<text x="747.00" y="102" font-family="Arial" font-size="12">23</text>
+<text x="235" y="137" text-anchor="end" font-family="Arial" font-size="13">highly_noisy_roman_urdu</text>
+<rect x="245" y="120" width="495.00" height="20" rx="3" fill="#1c5b58"/>
+<text x="747.00" y="136" font-family="Arial" font-size="12">23</text>
+<text x="235" y="171" text-anchor="end" font-family="Arial" font-size="13">informal_spelling</text>
+<rect x="245" y="154" width="495.00" height="20" rx="3" fill="#1c5b58"/>
+<text x="747.00" y="170" font-family="Arial" font-size="12">23</text>
+<text x="235" y="205" text-anchor="end" font-family="Arial" font-size="13">named_entity</text>
+<rect x="245" y="188" width="473.48" height="20" rx="3" fill="#1c5b58"/>
+<text x="725.48" y="204" font-family="Arial" font-size="12">22</text>
+<text x="235" y="239" text-anchor="end" font-family="Arial" font-size="13">short_query</text>
+<rect x="245" y="222" width="473.48" height="20" rx="3" fill="#1c5b58"/>
+<text x="725.48" y="238" font-family="Arial" font-size="12">22</text>
+<text x="235" y="273" text-anchor="end" font-family="Arial" font-size="13">slightly_ambiguous</text>
+<rect x="245" y="256" width="473.48" height="20" rx="3" fill="#1c5b58"/>
+<text x="725.48" y="272" font-family="Arial" font-size="12">22</text>
+<text x="235" y="307" text-anchor="end" font-family="Arial" font-size="13">urdu_english_code_switching</text>
+<rect x="245" y="290" width="473.48" height="20" rx="3" fill="#1c5b58"/>
+<text x="725.48" y="306" font-family="Arial" font-size="12">22</text>
+</svg>

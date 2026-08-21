@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="178" viewBox="0 0 820 178">
+<rect width="100%" height="100%" fill="white"/>
+<text x="410.0" y="27" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700">Baseline Recall@10</text>
+<text x="235" y="69" text-anchor="end" font-family="Arial" font-size="13">direct_dense</text>
+<rect x="245" y="52" width="226.88" height="20" rx="3" fill="#1c5b58"/>
+<text x="478.88" y="68" font-family="Arial" font-size="12">0.09167</text>
+<text x="235" y="103" text-anchor="end" font-family="Arial" font-size="13">single_transliteration_bm25</text>
+<rect x="245" y="86" width="61.88" height="20" rx="3" fill="#1c5b58"/>
+<text x="313.88" y="102" font-family="Arial" font-size="12">0.025</text>
+<text x="235" y="137" text-anchor="end" font-family="Arial" font-size="13">standard_hybrid</text>
+<rect x="245" y="120" width="226.88" height="20" rx="3" fill="#1c5b58"/>
+<text x="478.88" y="136" font-family="Arial" font-size="12">0.09167</text>
+</svg>

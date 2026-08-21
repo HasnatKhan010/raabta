@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="144" viewBox="0 0 820 144">
+<rect width="100%" height="100%" fill="white"/>
+<text x="410.0" y="27" text-anchor="middle" font-family="Arial" font-size="18" font-weight="700">Proposed improvement: development Recall@10</text>
+<text x="235" y="69" text-anchor="end" font-family="Arial" font-size="13">before title route</text>
+<rect x="245" y="52" width="94.88" height="20" rx="3" fill="#1c5b58"/>
+<text x="346.88" y="68" font-family="Arial" font-size="12">0.1917</text>
+<text x="235" y="103" text-anchor="end" font-family="Arial" font-size="13">with title route</text>
+<rect x="245" y="86" width="486.75" height="20" rx="3" fill="#1c5b58"/>
+<text x="738.75" y="102" font-family="Arial" font-size="12">0.9833</text>
+</svg>
